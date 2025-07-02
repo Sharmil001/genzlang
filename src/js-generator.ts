@@ -1,11 +1,19 @@
 export function generateJS(ast: any[]): string {
 	return ast
-		.map((node) => {
-			if (node.type === "SayExpression") {
-				return `console.log(${generateExpression(node.value)});`;
-			}
-		})
+		.map((node) => generateNode(node))
 		.join("\n");
+}
+
+function generateNode(node: any): string {
+  switch (node.type) {
+    case "SayExpression":
+      return `console.log(${generateExpression(node.value)});`;
+    case "VariableDeclaration":
+      console.log(node);
+      return `${node.kind === "vibe" ? "let" : "const"} ${node.id} = ${generateExpression(node.init)};`;
+    default:
+      return "undefined";
+  }
 }
 
 function generateExpression(expr: any): string {
