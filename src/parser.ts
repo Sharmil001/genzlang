@@ -34,6 +34,8 @@ import {
   LBracket,
   Comma,
   RBracket,
+  Idk,
+  Ghost,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -166,6 +168,8 @@ class GenZParser extends CstParser {
     this.OR([
       { ALT: () => this.CONSUME(NumberLiteral) },
       { ALT: () => this.CONSUME(StringLiteral) },
+      { ALT: () => this.CONSUME(Idk) },
+      { ALT: () => this.CONSUME(Ghost) },
       { ALT: () => this.CONSUME(Identifier) },
       {
         ALT: () => {

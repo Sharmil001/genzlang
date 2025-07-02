@@ -9,6 +9,9 @@ import type {
   StatementNode,
   BinaryExpression,
   LoopStatement,
+  // IdentifierNode,
+  // NumberLiteralNode,
+  // StringLiteralNode
 } from "./interfaces/asttype";
 
 export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() {
@@ -70,7 +73,6 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   loopStatement(ctx: any): LoopStatement {
-    console.dir(ctx, { depth: null });
     return {
       type: "LoopStatement",
       body: this.visit(ctx.statementOrBlock),
@@ -195,6 +197,12 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     }
     if (ctx.StringLiteral) {
       return { type: "StringLiteral", value: ctx.StringLiteral[0].image };
+    }
+    if (ctx.Idk) {
+      return { type: "UndefinedLiteral", value: undefined };
+    }
+    if (ctx.Ghost) {
+      return { type: "NullLiteral", value: null };
     }
     if (ctx.Identifier) {
       return { type: "Identifier", name: ctx.Identifier[0].image };

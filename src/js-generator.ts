@@ -32,12 +32,16 @@ function generateNode(node: ASTNode): string {
   }
 }
 
-function generateExpression(expr: ASTNode): string {
+function generateExpression(expr: ASTNode): string | undefined | null {
   switch (expr.type) {
     case "StringLiteral":
       return expr.value;
     case "NumberLiteral":
       return expr.value;
+    case "UndefinedLiteral":
+      return undefined;
+    case "NullLiteral":
+      return null;
     case "Identifier":
       return expr.name;
     case "BinaryExpression":

@@ -26,7 +26,7 @@ function interpreter(input: string) {
 }
 
 while (true) {
-	const input = prompt(">");
+	const input = prompt("👾 >");
 	if (input === "exit()") {
       fs.writeFileSync("dist/out.js", "");
       break;

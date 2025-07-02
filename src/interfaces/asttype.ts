@@ -7,12 +7,12 @@ export type ASTNode =
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
+  | NullLiteral
+  | UndefinedLiteral
   | ArrayLiteralNode
   | BlockStatement
   | LoopStatement;
-
-export interface ProgramNode {
-  type: "Program";
+export interface ProgramNode { type: "Program";
   body: ASTNode[];
 }
 
@@ -75,6 +75,16 @@ export interface ArrayLiteralNode {
   elements: ExpressionNode[];
 }
 
+export interface NullLiteral {
+  type: "NullLiteral";
+  value: null;
+}
+
+export interface UndefinedLiteral {
+  type: "UndefinedLiteral";
+  value: undefined;
+}
+
 export type StatementNode =
   | SayExpression
   | VariableDeclaration
@@ -86,4 +96,7 @@ export type ExpressionNode =
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
-  | ArrayLiteralNode;
+  | ArrayLiteralNode
+  | NullLiteral
+  | UndefinedLiteral;
+  
