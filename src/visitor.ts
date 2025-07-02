@@ -9,9 +9,6 @@ import type {
   StatementNode,
   BinaryExpression,
   LoopStatement,
-  // IdentifierNode,
-  // NumberLiteralNode,
-  // StringLiteralNode
 } from "./interfaces/asttype";
 
 export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() {

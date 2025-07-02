@@ -1,10 +1,10 @@
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
 import { generateJS } from "./src/js-generator";
 import { GenZLexer } from "./src/lexer";
 import { parserInstance } from "./src/parser";
 import { ToAstVisitor } from "./src/visitor";
-import fs from "fs";
-import vm from "vm";
 
 const context = vm.createContext({ console });
 
