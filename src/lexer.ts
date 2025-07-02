@@ -13,6 +13,8 @@ export const Nah = createToken({ name: "Nah", pattern: /nah/ });
 
 // Loops
 export const Loop = createToken({ name: "Loop", pattern: /loop/ });
+export const From = createToken({ name: "From", pattern: /from/ });
+export const To = createToken({ name: "To", pattern: /to/ });
 
 // Truthy / Falsy
 export const Legit = createToken({ name: "Legit", pattern: /legit/ });
@@ -59,6 +61,12 @@ export const GreaterThanOrEqualTo = createToken({ name: "GreaterThanOrEqualTo", 
 export const LessThan = createToken({ name: "LessThan", pattern: /</ });
 export const LessThanOrEqualTo = createToken({ name: "LessThanOrEqualTo", pattern: /<=/ });
 
+
+export const LBrace = createToken({ name: "LBrace", pattern: /{/ });
+export const RBrace = createToken({ name: "RBrace", pattern: /}/ });
+export const LParen = createToken({ name: "LParen", pattern: /\(/ });
+export const RParen = createToken({ name: "RParen", pattern: /\)/ });
+
 export const NumberLiteral = createToken({
 	name: "NumberLiteral",
 	pattern: /\d+/,
@@ -82,6 +90,10 @@ export const WhiteSpace = createToken({
 
 export const allTokens = [
 	WhiteSpace,
+  LBrace,
+  RBrace,
+  LParen,
+  RParen,
 
 	// Keywords
 	SameAs,
@@ -92,6 +104,8 @@ export const allTokens = [
 	If,
 	Nah,
 	Loop,
+  From,
+  To,
 	Do,
 	Async,
 	// Zoom,

@@ -11,6 +11,16 @@ function generateNode(node: any): string {
     case "VariableDeclaration":
       console.log(node);
       return `${node.kind === "vibe" ? "let" : "const"} ${node.id} = ${generateExpression(node.init)};`;
+    case "ConditionalStatement":
+      return `if (${generateExpression(node.test)}) {
+        ${generateNode(node.consequent)}
+      }${node.alternate ? `
+        else {
+          ${generateNode(node.alternate)}
+        }` : ""
+      }`;
+    case "BlockStatement":
+      return `${node.body.map((node) => generateNode(node)).join("\n")}`;
     default:
       return "undefined";
   }

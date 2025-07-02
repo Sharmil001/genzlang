@@ -13,15 +13,17 @@ function interpreter(input: string) {
   parserInstance.input = lexResult.tokens;
 
   const cst = parserInstance.program();
+  // console.dir(cst, { depth: null });
   const visitor = new ToAstVisitor();
   const ast = visitor.visit(cst);
+  // console.dir(ast, { depth: null });
   const compiledjs = generateJS(ast);
-
+  console.log(compiledjs, "compiledjs");
   const distDir = path.resolve("dist");
   if (!fs.existsSync(distDir)) {
     fs.mkdirSync(distDir, { recursive: true });
   }
-  fs.appendFileSync("dist/out.js", compiledjs + "\n");
+  fs.appendFileSync("dist/out.js", `${compiledjs}\n`);
 
   const script = new vm.Script(compiledjs);
   script.runInContext(context);
