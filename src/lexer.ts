@@ -15,6 +15,7 @@ export const Nah = createToken({ name: "Nah", pattern: /nah/ });
 export const Loop = createToken({ name: "Loop", pattern: /loop/ });
 export const From = createToken({ name: "From", pattern: /from/ });
 export const To = createToken({ name: "To", pattern: /to/ });
+export const In = createToken({ name: "To", pattern: /in/ });
 
 // Truthy / Falsy
 export const Legit = createToken({ name: "Legit", pattern: /legit/ });
@@ -57,15 +58,23 @@ export const Power = createToken({ name: "Power", pattern: /\*\*/ });
 
 // Comparison
 export const GreaterThan = createToken({ name: "GreaterThan", pattern: />/ });
-export const GreaterThanOrEqualTo = createToken({ name: "GreaterThanOrEqualTo", pattern: />=/ });
+export const GreaterThanOrEqualTo = createToken({
+	name: "GreaterThanOrEqualTo",
+	pattern: />=/,
+});
 export const LessThan = createToken({ name: "LessThan", pattern: /</ });
-export const LessThanOrEqualTo = createToken({ name: "LessThanOrEqualTo", pattern: /<=/ });
-
+export const LessThanOrEqualTo = createToken({
+	name: "LessThanOrEqualTo",
+	pattern: /<=/,
+});
 
 export const LBrace = createToken({ name: "LBrace", pattern: /{/ });
 export const RBrace = createToken({ name: "RBrace", pattern: /}/ });
 export const LParen = createToken({ name: "LParen", pattern: /\(/ });
 export const RParen = createToken({ name: "RParen", pattern: /\)/ });
+export const LBracket = createToken({ name: "LBracket", pattern: /\[/ });
+export const RBracket = createToken({ name: "RBracket", pattern: /\]/ });
+export const Comma = createToken({ name: "Comma", pattern: /,/ });
 
 export const NumberLiteral = createToken({
 	name: "NumberLiteral",
@@ -90,10 +99,13 @@ export const WhiteSpace = createToken({
 
 export const allTokens = [
 	WhiteSpace,
-  LBrace,
-  RBrace,
-  LParen,
-  RParen,
+	LBrace,
+	RBrace,
+	LParen,
+	RParen,
+	LBracket,
+	RBracket,
+	Comma,
 
 	// Keywords
 	SameAs,
@@ -104,8 +116,9 @@ export const allTokens = [
 	If,
 	Nah,
 	Loop,
-  From,
-  To,
+	From,
+	To,
+	In,
 	Do,
 	Async,
 	// Zoom,

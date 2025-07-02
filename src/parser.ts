@@ -1,36 +1,40 @@
 import { CstParser } from "chevrotain";
 import {
   allTokens,
-  Say, 
-  Assign, 
-  Plus, 
-  Minus, 
-  Multiply, 
+  Say,
+  Assign,
+  Plus,
+  Minus,
+  Multiply,
   Divide,
-  StringLiteral, 
-  NumberLiteral, 
-  Identifier, 
-  Modulo, 
+  StringLiteral,
+  NumberLiteral,
+  Identifier,
+  Modulo,
   Power,
-  Shout, 
-  Vibe, 
-  Lock, 
-  If, 
+  Shout,
+  Vibe,
+  Lock,
+  If,
   Nah,
-  GreaterThan, 
+  GreaterThan,
   GreaterThanOrEqualTo,
-  LessThan, 
+  LessThan,
   LessThanOrEqualTo,
-  Is, 
-  Aint, 
+  Is,
+  Aint,
   SameAs,
-  LBrace, 
+  LBrace,
   RBrace,
   LParen,
   RParen,
   Loop,
   From,
-  To
+  To,
+  In,
+  LBracket,
+  Comma,
+  RBracket,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -45,8 +49,7 @@ class GenZParser extends CstParser {
         { ALT: () => this.SUBRULE(this.sayStatement) },
         { ALT: () => this.SUBRULE(this.variableDeclaration) },
         { ALT: () => this.SUBRULE(this.conditionalStatement) },
-        { ALT: () => this.SUBRULE(this.loopStatement)}
-
+        { ALT: () => this.SUBRULE(this.loopStatement) },
       ]);
     });
   });
@@ -54,7 +57,7 @@ class GenZParser extends CstParser {
   private sayStatement = this.RULE("sayStatement", () => {
     this.OR([
       { ALT: () => this.CONSUME(Say) },
-      { ALT: () => this.CONSUME(Shout) }
+      { ALT: () => this.CONSUME(Shout) },
     ]);
     this.SUBRULE(this.expression);
   });
@@ -62,7 +65,7 @@ class GenZParser extends CstParser {
   private variableDeclaration = this.RULE("variableDeclaration", () => {
     this.OR([
       { ALT: () => this.CONSUME(Vibe) },
-      { ALT: () => this.CONSUME(Lock) }
+      { ALT: () => this.CONSUME(Lock) },
     ]);
     this.CONSUME(Identifier);
     this.CONSUME(Assign);
@@ -79,21 +82,21 @@ class GenZParser extends CstParser {
     });
   });
 
-  // loop i from 0 to 10 { say i }
-  // private loopStatement = this.RULE("loopStatement", () => {
-  //   this.CONSUME(Loop);
-  //   this.CONSUME(Identifier);
-  //   this.CONSUME(From);
-  //   this.SUBRULE1(this.expression);
-  //   this.CONSUME(To);
-  //   this.SUBRULE1(this.expression);
-  //   this.SUBRULE(this.statementOrBlock);
-  // });
+  private loopStatement = this.RULE("loopStatement", () => {
+    this.CONSUME(Loop);
+    this.SUBRULE1(this.expression);
+    this.OR([
+      { ALT: () => this.CONSUME(To) },
+      { ALT: () => this.CONSUME(From) },
+    ]);
+    this.SUBRULE2(this.expression);
+    this.SUBRULE3(this.statementOrBlock);
+  });
 
   private statementOrBlock = this.RULE("statementOrBlock", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.statement) },
-      { ALT: () => this.SUBRULE(this.block) }
+      { ALT: () => this.SUBRULE(this.block) },
     ]);
   });
 
@@ -109,7 +112,7 @@ class GenZParser extends CstParser {
     this.OR([
       { ALT: () => this.SUBRULE(this.sayStatement) },
       { ALT: () => this.SUBRULE(this.variableDeclaration) },
-      { ALT: () => this.SUBRULE(this.conditionalStatement) }
+      { ALT: () => this.SUBRULE(this.conditionalStatement) },
     ]);
   });
 
@@ -127,7 +130,7 @@ class GenZParser extends CstParser {
         { ALT: () => this.CONSUME(LessThanOrEqualTo) },
         { ALT: () => this.CONSUME(Is) },
         { ALT: () => this.CONSUME(Aint) },
-        { ALT: () => this.CONSUME(SameAs) }
+        { ALT: () => this.CONSUME(SameAs) },
       ]);
       this.SUBRULE2(this.additionExpression);
     });
@@ -138,24 +141,27 @@ class GenZParser extends CstParser {
     this.MANY(() => {
       this.OR([
         { ALT: () => this.CONSUME(Plus) },
-        { ALT: () => this.CONSUME(Minus) }
+        { ALT: () => this.CONSUME(Minus) },
       ]);
       this.SUBRULE2(this.multiplicationExpression);
     });
   });
 
-  private multiplicationExpression = this.RULE("multiplicationExpression", () => {
-    this.SUBRULE(this.atomicExpression);
-    this.MANY(() => {
-      this.OR([
-        { ALT: () => this.CONSUME(Multiply) },
-        { ALT: () => this.CONSUME(Divide) },
-        { ALT: () => this.CONSUME(Modulo) },
-        { ALT: () => this.CONSUME(Power) }
-      ]);
-      this.SUBRULE2(this.atomicExpression);
-    });
-  });
+  private multiplicationExpression = this.RULE(
+    "multiplicationExpression",
+    () => {
+      this.SUBRULE(this.atomicExpression);
+      this.MANY(() => {
+        this.OR([
+          { ALT: () => this.CONSUME(Multiply) },
+          { ALT: () => this.CONSUME(Divide) },
+          { ALT: () => this.CONSUME(Modulo) },
+          { ALT: () => this.CONSUME(Power) },
+        ]);
+        this.SUBRULE2(this.atomicExpression);
+      });
+    },
+  );
 
   private atomicExpression = this.RULE("atomicExpression", () => {
     this.OR([
@@ -167,9 +173,24 @@ class GenZParser extends CstParser {
           this.CONSUME(LParen);
           this.SUBRULE(this.expression);
           this.CONSUME(RParen);
-        }
-      }
+        },
+      },
+      {
+        ALT: () => this.SUBRULE(this.arrayLiteral),
+      },
     ]);
+  });
+
+  private arrayLiteral = this.RULE("arrayLiteral", () => {
+    this.CONSUME(LBracket);
+    this.OPTION(() => {
+      this.SUBRULE(this.expression);
+      this.MANY(() => {
+        this.CONSUME(Comma);
+        this.SUBRULE2(this.expression);
+      });
+    });
+    this.CONSUME(RBracket);
   });
 }
 

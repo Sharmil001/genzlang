@@ -7,10 +7,13 @@ export type ASTNode =
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
-  | BlockStatement;
+  | ArrayLiteralNode
+  | BlockStatement
+  | LoopStatement;
 
 export interface ProgramNode {
-  type: "Program"; body: ASTNode[];
+  type: "Program";
+  body: ASTNode[];
 }
 
 export interface SayExpression {
@@ -30,6 +33,7 @@ export interface LoopStatement {
   body: StatementNode;
   start: ExpressionNode;
   end: ExpressionNode;
+  loopType: string;
 }
 
 export interface ConditionalStatement {
@@ -66,6 +70,11 @@ export interface StringLiteralNode {
   value: string;
 }
 
+export interface ArrayLiteralNode {
+  type: "ArrayLiteral";
+  elements: ExpressionNode[];
+}
+
 export type StatementNode =
   | SayExpression
   | VariableDeclaration
@@ -76,4 +85,5 @@ export type ExpressionNode =
   | BinaryExpression
   | IdentifierNode
   | NumberLiteralNode
-  | StringLiteralNode;
+  | StringLiteralNode
+  | ArrayLiteralNode;

@@ -8,6 +8,7 @@ import type {
   ExpressionNode,
   StatementNode,
   BinaryExpression,
+  LoopStatement,
   // IdentifierNode,
   // NumberLiteralNode,
   // StringLiteralNode
@@ -27,17 +28,22 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     }
 
     if (ctx.variableDeclaration) {
-      statements.push(...ctx.variableDeclaration.map((stmt: any) => this.visit(stmt)));
+      statements.push(
+        ...ctx.variableDeclaration.map((stmt: any) => this.visit(stmt)),
+      );
     }
 
     if (ctx.conditionalStatement) {
-      statements.push(...ctx.conditionalStatement.map((stmt: any) => this.visit(stmt)));
+      statements.push(
+        ...ctx.conditionalStatement.map((stmt: any) => this.visit(stmt)),
+      );
     }
 
-    if(ctx.loopStatement) {
-      statements.push(...ctx.loopStatement.map((stmt: any) => this.visit(stmt)));
+    if (ctx.loopStatement) {
+      statements.push(
+        ...ctx.loopStatement.map((stmt: any) => this.visit(stmt)),
+      );
     }
-
     return statements;
   }
 
@@ -66,14 +72,16 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     };
   }
 
-  // loopStatement(ctx: any): LoopStatement {
-  //   return {
-  //     type: "LoopStatement",
-  //     body: this.visit(ctx.statementOrBlock),
-  //     start: this.visit(ctx.expression),
-  //     end: this.visit(ctx.expression),
-  //   };
-  // }
+  loopStatement(ctx: any): LoopStatement {
+    console.dir(ctx, { depth: null });
+    return {
+      type: "LoopStatement",
+      body: this.visit(ctx.statementOrBlock),
+      start: this.visit(ctx.expression[0]),
+      end: this.visit(ctx.expression[1]),
+      loopType: !ctx.To ? "collection" : "index",
+    };
+  }
 
   statementOrBlock(ctx: any): StatementNode {
     if (ctx.statement) return this.visit(ctx.statement);
@@ -103,16 +111,32 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     const left = this.visit(ctx.additionExpression[0]);
 
     if (ctx.GreaterThan) {
-      return this.makeBinary(left, ctx.GreaterThan[0].image, this.visit(ctx.additionExpression[1]));
+      return this.makeBinary(
+        left,
+        ctx.GreaterThan[0].image,
+        this.visit(ctx.additionExpression[1]),
+      );
     }
     if (ctx.GreaterThanOrEqualTo) {
-      return this.makeBinary(left, ctx.GreaterThanOrEqualTo[0].image, this.visit(ctx.additionExpression[1]));
+      return this.makeBinary(
+        left,
+        ctx.GreaterThanOrEqualTo[0].image,
+        this.visit(ctx.additionExpression[1]),
+      );
     }
     if (ctx.LessThan) {
-      return this.makeBinary(left, ctx.LessThan[0].image, this.visit(ctx.additionExpression[1]));
+      return this.makeBinary(
+        left,
+        ctx.LessThan[0].image,
+        this.visit(ctx.additionExpression[1]),
+      );
     }
     if (ctx.LessThanOrEqualTo) {
-      return this.makeBinary(left, ctx.LessThanOrEqualTo[0].image, this.visit(ctx.additionExpression[1]));
+      return this.makeBinary(
+        left,
+        ctx.LessThanOrEqualTo[0].image,
+        this.visit(ctx.additionExpression[1]),
+      );
     }
     if (ctx.Is) {
       return this.makeBinary(left, "==", this.visit(ctx.additionExpression[1]));
@@ -121,7 +145,11 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       return this.makeBinary(left, "!=", this.visit(ctx.additionExpression[1]));
     }
     if (ctx.SameAs) {
-      return this.makeBinary(left, "===", this.visit(ctx.additionExpression[1]));
+      return this.makeBinary(
+        left,
+        "===",
+        this.visit(ctx.additionExpression[1]),
+      );
     }
 
     return left;
@@ -141,7 +169,8 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     const keys = Object.keys(ctx);
     let left = this.visit(ctx.atomicExpression[0]);
     const operatorGroups = ["Multiply", "Divide", "Modulo", "Power"];
-    const operatorKey: string = operatorGroups.find((op) => keys.includes(op)) ?? "";
+    const operatorKey: string =
+      operatorGroups.find((op) => keys.includes(op)) ?? "";
     for (let i = 0; i < (ctx[operatorKey] || []).length; i++) {
       const operator = ctx[operatorKey][i].image;
       const right = this.visit(ctx.atomicExpression[i + 1]);
@@ -150,7 +179,20 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     return left;
   }
 
-  atomicExpression(ctx: any): ExpressionNode {
+  arrayLiteral(ctx: any): ExpressionNode {
+    const elements: ExpressionNode[] = [];
+
+    if (ctx.expression) {
+      elements.push(...ctx.expression.map((expr: any) => this.visit(expr)));
+    }
+
+    return {
+      type: "ArrayLiteral",
+      elements,
+    };
+  }
+
+  atomicExpression(ctx: any): ExpressionNode | undefined {
     if (ctx.NumberLiteral) {
       return { type: "NumberLiteral", value: ctx.NumberLiteral[0].image };
     }
@@ -160,10 +202,16 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     if (ctx.Identifier) {
       return { type: "Identifier", name: ctx.Identifier[0].image };
     }
-    throw new Error("Invalid atomicExpression");
+    if (ctx.arrayLiteral) {
+      return this.visit(ctx.arrayLiteral[0]);
+    }
   }
 
-  makeBinary(left: ExpressionNode, operator: string, right: ExpressionNode): BinaryExpression {
+  makeBinary(
+    left: ExpressionNode,
+    operator: string,
+    right: ExpressionNode,
+  ): BinaryExpression {
     return {
       type: "BinaryExpression",
       operator,

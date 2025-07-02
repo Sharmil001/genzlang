@@ -11,14 +11,10 @@ const context = vm.createContext({ console });
 function interpreter(input: string) {
   const lexResult = GenZLexer.tokenize(input);
   parserInstance.input = lexResult.tokens;
-
   const cst = parserInstance.program();
-  // console.dir(cst, { depth: null });
   const visitor = new ToAstVisitor();
   const ast = visitor.visit(cst);
-  // console.dir(ast, { depth: null });
   const compiledjs = generateJS(ast);
-  console.log(compiledjs, "compiledjs");
   const distDir = path.resolve("dist");
   if (!fs.existsSync(distDir)) {
     fs.mkdirSync(distDir, { recursive: true });
@@ -39,4 +35,3 @@ while (true) {
     interpreter(input);
   }
 }
-
