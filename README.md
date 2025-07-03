@@ -82,13 +82,50 @@ bun run index.ts
     yo item + 1 "Added One"
 ```
 
-# 🤝 Contribute
-Got ideas for:
+## 💡 About genz-lang
+> ⚡ A bold, expressive, Gen Z-inspired programming language for the terminal generation.  
+> It’s not just code — it’s a whole damn *vibe*.
+
+`genz-lang` reimagines traditional programming through a Gen Z lens — with slangy keywords, emoji-rich syntax, and natural language expressions.  
+Built for fun, education, and creative chaos, this language is for developers who are tired of boring old semicolons and crave a bit of ✨drip✨ in their code.
+
+# 🌈 Why?
+
+Because:
+- `print("hello world")` is ✏️ mid — we say `yo "sup world"`
+- `else` is old-school — we say `nah:`
+- Indexing with `@` hits different than `[0]`
+- Errors should feel like being left on read
+
+# 🧠 Designed For:
+
+- Curious devs who love toy languages and creative DSLs
+- Educators who want to teach core concepts in a fun way
+- Rebels who think `vibe = "chill"` > `let x = "chill"`
+
+## 🤝 Contribute
+**Got ideas for:**
 
 <ul>
     <li>More chaotic keywords?</li>
-    <li>Cooler array syntax?</li>
+    <li>Cooler syntax?</li>
     <li>Gen Z style features?</li>
 </ul>
 
-Pull up with a PR or open an issue — let’s build the weirdest language ever, together.
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a Pull Request
+
+Pull up with a PR or open an issue. let’s build the weirdest language ever, together.
+
+## 📝 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.    
+
+## 🙏 Acknowledgments
+<ul>
+    <li>[Chevrotain](https://github.com/SAP/chevrotain) for the PEG parser toolkit.</li>
+    <li>[Bun](https://bun.sh/) for the ultra-fast JS runtime.</li>
+    <li>[TypeScript](https://www.typescriptlang.org/) for the type safety.</li>
+</ul>
