@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
-import { generateJS } from "./core/js-generator";
-import { GenZLexer } from "./core/lexer";
-import { parserInstance } from "./core/parser";
-import { ToAstVisitor } from "./core/visitor";
+import { generateJS } from "./js-generator";
+import { GenZLexer } from "./lexer";
+import { parserInstance } from "./parser";
+import { ToAstVisitor } from "./visitor";
 
 const context = vm.createContext({ console });
 
@@ -14,7 +14,7 @@ function interpreter(input: string) {
   const cst = parserInstance.program();
   const visitor = new ToAstVisitor();
   const ast = visitor.visit(cst);
-  // console.dir(ast, { depth: null });
+  console.dir(ast, { depth: null });
   const compiledjs = generateJS(ast);
   const distDir = path.resolve("dist");
   if (!fs.existsSync(distDir)) {

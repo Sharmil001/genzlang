@@ -4,6 +4,7 @@ export type ASTNode =
   | VariableDeclaration
   | ConditionalStatement
   | BinaryExpression
+  | UnaryExpression
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
@@ -55,6 +56,12 @@ export interface BinaryExpression {
   right: ExpressionNode;
 }
 
+export interface UnaryExpression {
+  type: "UnaryExpression";
+  operator: string;
+  argument: ExpressionNode;
+}
+
 export interface IdentifierNode {
   type: "Identifier";
   name: string;
@@ -99,6 +106,7 @@ export type StatementNode =
 
 export type ExpressionNode =
   | BinaryExpression
+  | UnaryExpression
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode

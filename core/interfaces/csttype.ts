@@ -98,7 +98,33 @@ export interface ExpressionCstNode extends CstNode {
   children: ExpressionCstChildren;
 }
 
+export interface ExpressionCstNode extends CstNode {
+  name: "expression";
+  children: ExpressionCstChildren;
+}
+
 export type ExpressionCstChildren = {
+  logicalExpression: LogicalExpressionCstNode[];
+};
+
+export interface LogicalExpressionCstNode extends CstNode {
+  name: "logicalExpression";
+  children: LogicalExpressionCstChildren;
+}
+
+export type LogicalExpressionCstChildren = {
+  logicalNotExpression: LogicalNotExpressionCstNode[];
+  And?: IToken[];
+  Or?: IToken[];
+};
+
+export interface LogicalNotExpressionCstNode extends CstNode {
+  name: "logicalNotExpression";
+  children: LogicalNotExpressionCstChildren;
+}
+
+export type LogicalNotExpressionCstChildren = {
+  Not?: IToken[];
   comparisonExpression: ComparisonExpressionCstNode[];
 };
 
@@ -116,6 +142,11 @@ export type ComparisonExpressionCstChildren = {
   Is?: IToken[];
   Aint?: IToken[];
   SameAs?: IToken[];
+  SameVibe?: IToken[];
+  Highkey?: IToken[];
+  NoCap?: IToken[];
+  Lowkey?: IToken[];
+  LowkeyMax?: IToken[];
 };
 
 export interface AdditionExpressionCstNode extends CstNode {
@@ -155,6 +186,9 @@ export type AtomicExpressionCstChildren = {
   expression?: ExpressionCstNode[];
   RParen?: IToken[];
   arrayLiteral?: ArrayLiteralCstNode[];
+  Idk?: IToken[];
+  Ghost?: IToken[];
+  arrayAccess?: ArrayAccessCstNode[];
 };
 
 export interface ArrayLiteralCstNode extends CstNode {
@@ -168,6 +202,17 @@ export type ArrayLiteralCstChildren = {
   Comma?: IToken[];
   expression2?: ExpressionCstNode[];
   RBracket: IToken[];
+};
+
+export interface ArrayAccessCstNode extends CstNode {
+  name: "arrayAccess";
+  children: ArrayAccessCstChildren;
+}
+
+export type ArrayAccessCstChildren = {
+  Identifier: IToken[];
+  At: IToken[];
+  expression: ExpressionCstNode[];
 };
 
 export interface IGenZVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {

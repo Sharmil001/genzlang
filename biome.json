@@ -1,35 +1,31 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": ["src/routeTree.gen.ts"],
+    "include": ["src/*", ".vscode/*", "core/*", "web/*"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "tab"
+  },
+  "organizeImports": {
+    "enabled": true
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "a11y": {
-        "all": false
-      },
-      "correctness": {
-        "noUnusedImports": "warn"
-      },
-      "suspicious": {
-        "noFallthroughSwitchClause": "warn"
-      },
-      "nursery": {
-        "useSortedClasses": "warn"
-      }
+      "recommended": true
     }
   },
-  "organizeImports": {
-    "enabled": false
-  },
-  "files": {
-    "ignore": [
-      "node_modules",
-      ".vscode",
-      ".wk",
-      "dist",
-      "backend/src/drizzle/migrations",
-      "frontend/src/trace",
-      "frontend/src/routeTree.gen.ts"
-    ]
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
   }
 }

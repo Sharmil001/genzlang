@@ -1,11 +1,6 @@
 import { createToken, Lexer } from "chevrotain";
 
-// Variable declaration
-// export const Vibe = createToken({ name: "Vibe", pattern: /vibe/ });
-// export const Lock = createToken({ name: "Lock", pattern: /lock/ });
-//
 // Output / Print
-// export const Say = createToken({ name: "Say", pattern: /say/ });
 export const Yo = createToken({ name: "Yo", pattern: /yo/ });
 // Conditionals
 export const If = createToken({ name: "If", pattern: /if/ });
@@ -24,14 +19,10 @@ export const Cap = createToken({ name: "Cap", pattern: /cap/ });
 // Function declaration
 export const Do = createToken({ name: "Do", pattern: /do/ });
 export const Async = createToken({ name: "Async", pattern: /async/ });
+
 // Null / Undefined
 export const Ghost = createToken({ name: "Ghost", pattern: /ghost/ });
 export const Idk = createToken({ name: "Idk", pattern: /idk/ });
-
-// Comparison Operators
-export const Is = createToken({ name: "Is", pattern: /is/ });
-export const SameAs = createToken({ name: "SameAs", pattern: /same as/ });
-export const Aint = createToken({ name: "Aint", pattern: /aint/ });
 
 // Logical Operators
 export const And = createToken({ name: "And", pattern: /and/ });
@@ -55,17 +46,21 @@ export const Divide = createToken({ name: "Divide", pattern: /\// });
 export const Modulo = createToken({ name: "Modulo", pattern: /%/ });
 export const Power = createToken({ name: "Power", pattern: /\*\*/ });
 
-// Comparison
-export const GreaterThan = createToken({ name: "GreaterThan", pattern: />/ });
-export const GreaterThanOrEqualTo = createToken({
-	name: "GreaterThanOrEqualTo",
-	pattern: />=/,
-});
-export const LessThan = createToken({ name: "LessThan", pattern: /</ });
-export const LessThanOrEqualTo = createToken({
-	name: "LessThanOrEqualTo",
-	pattern: /<=/,
-});
+// Comparison Operators
+export const Is = createToken({ name: "Is", pattern: /is/ }); // ==
+export const SameVibe = createToken({ name: "SameVibe", pattern: /same vibe/ }); // ===
+export const Aint = createToken({ name: "Aint", pattern: /aint/ }); // !=
+export const NotSame = createToken({ name: "NotSame", pattern: /not same/ }); // !==
+export const Highkey = createToken({ name: "Highkey", pattern: /highkey/ }); // >
+export const NoCap = createToken({
+	name: "NoCap",
+	pattern: /no cap/,
+}); // >=
+export const Lowkey = createToken({ name: "Lowkey", pattern: /lowkey/ }); // <
+export const LowkeyMax = createToken({
+	name: "LowkeyMax",
+	pattern: /lowkey max/,
+}); // <=
 
 export const LBrace = createToken({ name: "LBrace", pattern: /{/ });
 export const RBrace = createToken({ name: "RBrace", pattern: /}/ });
@@ -107,14 +102,10 @@ export const allTokens = [
 	LBracket,
 	RBracket,
 	Comma,
-  Colon,
-  At,
+	Colon,
+	At,
 
 	// Keywords
-	SameAs,
-	// Vibe,
-	// Lock,
-	// Say,
 	Yo,
 	If,
 	Nah,
@@ -134,13 +125,12 @@ export const allTokens = [
 	Aint,
 	And,
 	Or,
+	NotSame,
 	Not,
 	Risk,
 	Oops,
 	Explode,
 	Hold,
-
-	// Operators
 	Assign,
 	Plus,
 	Minus,
@@ -148,10 +138,11 @@ export const allTokens = [
 	Multiply,
 	Divide,
 	Modulo,
-	GreaterThanOrEqualTo,
-	GreaterThan,
-	LessThanOrEqualTo,
-	LessThan,
+	SameVibe,
+	Highkey,
+	NoCap,
+	LowkeyMax,
+	Lowkey,
 
 	// Literals
 	NumberLiteral,

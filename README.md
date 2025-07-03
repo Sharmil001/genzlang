@@ -68,7 +68,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 <p align="center">
   Made with ❤️ by the <b>GenZ Lang</b> team. <br />
-  <a href="https://github.com/genz-lang/genz-lang/issues">Report Bugs</a> · 
-  <a href="https://github.com/genz-lang/genz-lang/issues">Request Features</a>
+  <a href="https://github.com/Sharmil001/genz-lang/issues">Report Bugs</a> · 
+  <a href="https://github.com/Sharmil001/genz-lang/labels/enhancement">Request Features</a>
 </p>
 

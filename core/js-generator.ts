@@ -46,6 +46,8 @@ function generateExpression(expr: ASTNode): string | undefined | null {
       return expr.name;
     case "BinaryExpression":
       return `(${generateExpression(expr.left)} ${expr.operator} ${generateExpression(expr.right)})`;
+    case "UnaryExpression":
+      return `(${expr.operator} ${generateExpression(expr.argument)})`;
     case "ArrayLiteral":
       return `[${expr.elements.map((e: ASTNode) => generateExpression(e)).join(", ")}]`;
     case "ArrayAccess":

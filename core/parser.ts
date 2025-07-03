@@ -14,13 +14,8 @@ import {
   Yo,
   If,
   Nah,
-  GreaterThan,
-  GreaterThanOrEqualTo,
-  LessThan,
-  LessThanOrEqualTo,
   Is,
   Aint,
-  SameAs,
   LParen,
   RParen,
   Loop,
@@ -33,6 +28,15 @@ import {
   Ghost,
   Colon,
   At,
+  SameVibe,
+  Highkey,
+  NoCap,
+  Lowkey,
+  LowkeyMax,
+  NotSame,
+  Not,
+  And,
+  Or,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -53,13 +57,14 @@ class GenZParser extends CstParser {
   });
 
   private sayStatement = this.RULE("sayStatement", () => {
-    this.CONSUME(Yo)
+    this.CONSUME(Yo);
     this.SUBRULE(this.expression);
   });
 
   private variableDeclaration = this.RULE("variableDeclaration", () => {
     this.CONSUME(Identifier);
-    this.CONSUME(Assign); this.SUBRULE(this.expression);
+    this.CONSUME(Assign);
+    this.SUBRULE(this.expression);
   });
 
   private conditionalStatement = this.RULE("conditionalStatement", () => {
@@ -101,6 +106,24 @@ class GenZParser extends CstParser {
   });
 
   private expression = this.RULE("expression", () => {
+    this.SUBRULE(this.logicalExpression);
+  });
+
+  private logicalExpression = this.RULE("logicalExpression", () => {
+    this.SUBRULE(this.logicalNotExpression);
+    this.MANY(() => {
+      this.OR([
+        { ALT: () => this.CONSUME(And) },
+        { ALT: () => this.CONSUME(Or) },
+      ]);
+      this.SUBRULE2(this.logicalNotExpression);
+    });
+  });
+
+  private logicalNotExpression = this.RULE("logicalNotExpression", () => {
+    this.OPTION(() => {
+      this.CONSUME(Not);
+    });
     this.SUBRULE(this.comparisonExpression);
   });
 
@@ -108,13 +131,14 @@ class GenZParser extends CstParser {
     this.SUBRULE(this.additionExpression);
     this.OPTION(() => {
       this.OR([
-        { ALT: () => this.CONSUME(GreaterThan) },
-        { ALT: () => this.CONSUME(GreaterThanOrEqualTo) },
-        { ALT: () => this.CONSUME(LessThan) },
-        { ALT: () => this.CONSUME(LessThanOrEqualTo) },
         { ALT: () => this.CONSUME(Is) },
+        { ALT: () => this.CONSUME(SameVibe) },
         { ALT: () => this.CONSUME(Aint) },
-        { ALT: () => this.CONSUME(SameAs) },
+        { ALT: () => this.CONSUME(NotSame) },
+        { ALT: () => this.CONSUME(Highkey) },
+        { ALT: () => this.CONSUME(NoCap) },
+        { ALT: () => this.CONSUME(Lowkey) },
+        { ALT: () => this.CONSUME(LowkeyMax) },
       ]);
       this.SUBRULE2(this.additionExpression);
     });
