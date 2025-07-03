@@ -1,88 +1,4 @@
-# genz-lang
-
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-🔊 Print Statement
-
-
-```bash
-  yo "Wassup, world!" 
-```
-
-🛠 Variable Declaration
-
-```bash
-  vibe = "chill"
-  yo "Today's vibe is " + vibe
-```
-
-
-📦 Arrays
-
-```bash
-  playlist = ["Drake", "Travis", "Weeknd"]
-  yo playlist @ 0
-```
-
-🤯 Conditional:
-
-```bash
-  if mood more than 8:
-    yo "You straight vibin' 🔥"
-  nah:
-    yo "Keep your head up, fam 😎"
-```
-
-
-🧃 Arithmetic Operators
-
-```bash
-  a = 10
-  b = 20
-  c = a + b
-  yo "The sum of " + a + " and " + b + " is " + c
-
-  yo  a + b // addition
-  yo  a - b // subtraction
-  yo  a * b // multiplication
-  yo  a / b // division
-  yo  a % b // modulo
-  yo  a ** b // power
-```
-
-
-🔥 Logical Operators
-
-```bash
-  && -> and
-  || -> or
-  !  -> not
-```
-
-
-🔁 Loops
-  
-```bash
-  loop 0 to 10:
-    yo "Yo"
-
-  nums = [1, 2, 3, 4, 5]
-  loop item from nums:
-    yo "Number: " + item
-    yo item + 1 "Added One"
-```
-
-## 💡 About genz-lang
+# GenZ Language (genz-lang)
 > ⚡ A bold, expressive, Gen Z-inspired programming language for the terminal generation.  
 > It’s not just code — it’s a whole damn *vibe*.
 
@@ -103,9 +19,33 @@ Because:
 - Educators who want to teach core concepts in a fun way
 - Rebels who think `vibe = "chill"` > `let x = "chill"`
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 16+
+- Bun
+
+### Installation
+1. Clone the repository
+```bash
+    git clone https://github.com/genz-lang/genz-lang.git
+```
+2. Install dependencies
+```bash
+    bun install
+```
+3. Run the interpreter
+```bash
+    bun run index.ts
+```
+4. Usage
+```bash
+  yo "Wassup, world!"
+```
+
 ## 🤝 Contribute
 **Got ideas for:**
-> 🔑 More chaotic keywords? 📜 Cooler syntax? 🆕 Gen Z style features?
+> More chaotic keywords? Cooler syntax? Gen Z style features?
 
 1. Fork the repository
 2. Create a branch: `git checkout -b feature/my-feature`
@@ -120,9 +60,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 <ul>
-    <li>[Chevrotain](https://github.com/SAP/chevrotain) for the PEG parser toolkit.</li>
-    <li>[Bun](https://bun.sh/) for the ultra-fast JS runtime.</li>
-    <li>[TypeScript](https://www.typescriptlang.org/) for the type safety.</li>
+    <li><a href="https://github.com/SAP/chevrotain">Chevrotain</a> for the PEG parser toolkit.</li>
+    <li><a href="https://bun.sh/">Bun</a> for the ultra-fast JS runtime.</li>
+    <li><a href="https://www.typescriptlang.org/">TypeScript</a> for the type safety.</li>
 </ul>
 
 ---
