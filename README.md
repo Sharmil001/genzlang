@@ -81,3 +81,14 @@ bun run index.ts
     yo "Number: " + item
     yo item + 1 "Added One"
 ```
+
+# 🤝 Contribute
+Got ideas for:
+
+<ul>
+    <li>More chaotic keywords?</li>
+    <li>Cooler array syntax?</li>
+    <li>Gen Z style features?</li>
+</ul>
+
+Pull up with a PR or open an issue — let’s build the weirdest language ever, together.
