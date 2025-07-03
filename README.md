@@ -89,7 +89,7 @@ bun run index.ts
 `genz-lang` reimagines traditional programming through a Gen Z lens — with slangy keywords, emoji-rich syntax, and natural language expressions.  
 Built for fun, education, and creative chaos, this language is for developers who are tired of boring old semicolons and crave a bit of ✨drip✨ in their code.
 
-# 🌈 Why?
+## 🌈 Why?
 
 Because:
 - `print("hello world")` is ✏️ mid — we say `yo "sup world"`
@@ -97,7 +97,7 @@ Because:
 - Indexing with `@` hits different than `[0]`
 - Errors should feel like being left on read
 
-# 🧠 Designed For:
+## 🧠 Designed For:
 
 - Curious devs who love toy languages and creative DSLs
 - Educators who want to teach core concepts in a fun way
@@ -105,12 +105,7 @@ Because:
 
 ## 🤝 Contribute
 **Got ideas for:**
-
-<ul>
-    <li>More chaotic keywords?</li>
-    <li>Cooler syntax?</li>
-    <li>Gen Z style features?</li>
-</ul>
+> 🔑 More chaotic keywords? 📜 Cooler syntax? 🆕 Gen Z style features?
 
 1. Fork the repository
 2. Create a branch: `git checkout -b feature/my-feature`
@@ -129,3 +124,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     <li>[Bun](https://bun.sh/) for the ultra-fast JS runtime.</li>
     <li>[TypeScript](https://www.typescriptlang.org/) for the type safety.</li>
 </ul>
+
+---
+<p align="center">
+  Made with ❤️ by the <b>GenZ Lang</b> team. <br />
+  <a href="https://github.com/genz-lang/genz-lang/issues">Report Bugs</a> · 
+  <a href="https://github.com/genz-lang/genz-lang/issues">Request Features</a>
+</p>
+
