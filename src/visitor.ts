@@ -57,8 +57,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   variableDeclaration(ctx: any): VariableDeclaration {
     return {
       type: "VariableDeclaration",
-      kind: ctx.Vibe ? "vibe" : "lock",
-      id: ctx.Identifier[0].image,
+      name: ctx.Identifier[0].image,
       init: this.visit(ctx.expression),
     };
   }
@@ -67,24 +66,25 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     return {
       type: "ConditionalStatement",
       test: this.visit(ctx.expression),
-      consequent: this.visit(ctx.statementOrBlock),
-      alternate: ctx.Nah ? this.visit(ctx.statementOrBlock) : null,
+      consequent: this.visit(ctx.statementOrBlock[0]),
+      alternate: ctx.Nah ? this.visit(ctx.statementOrBlock[1]) : null,
     };
   }
 
   loopStatement(ctx: any): LoopStatement {
     return {
       type: "LoopStatement",
-      body: this.visit(ctx.statementOrBlock),
       start: this.visit(ctx.expression[0]),
       end: this.visit(ctx.expression[1]),
       loopType: !ctx.To ? "collection" : "index",
+      body: this.visit(ctx.statementOrBlock),
     };
   }
 
-  statementOrBlock(ctx: any): StatementNode {
-    if (ctx.statement) return this.visit(ctx.statement);
-    if (ctx.block) return this.visit(ctx.block);
+  statementOrBlock(ctx: any): StatementNode[] {
+    if (ctx.statement) {
+      return ctx.statement.map((stmt: any) => this.visit(stmt));
+    }
     throw new Error("Invalid statementOrBlock");
   }
 
@@ -191,6 +191,15 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     };
   }
 
+  arrayAccess(ctx: any): ExpressionNode {
+    return {
+      type: "ArrayAccess",
+      name: ctx.Identifier[0].image,
+      index: this.visit(ctx.expression),
+    };
+  }
+
+
   atomicExpression(ctx: any): ExpressionNode | undefined {
     if (ctx.NumberLiteral) {
       return { type: "NumberLiteral", value: ctx.NumberLiteral[0].image };
@@ -209,6 +218,9 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     }
     if (ctx.arrayLiteral) {
       return this.visit(ctx.arrayLiteral[0]);
+    }
+    if (ctx.arrayAccess) {
+      return this.visit(ctx.arrayAccess);
     }
   }
 

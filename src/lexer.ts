@@ -1,12 +1,12 @@
 import { createToken, Lexer } from "chevrotain";
 
 // Variable declaration
-export const Vibe = createToken({ name: "Vibe", pattern: /vibe/ });
-export const Lock = createToken({ name: "Lock", pattern: /lock/ });
-
+// export const Vibe = createToken({ name: "Vibe", pattern: /vibe/ });
+// export const Lock = createToken({ name: "Lock", pattern: /lock/ });
+//
 // Output / Print
-export const Say = createToken({ name: "Say", pattern: /say/ });
-export const Shout = createToken({ name: "Shout", pattern: /shout/ });
+// export const Say = createToken({ name: "Say", pattern: /say/ });
+export const Yo = createToken({ name: "Yo", pattern: /yo/ });
 // Conditionals
 export const If = createToken({ name: "If", pattern: /if/ });
 export const Nah = createToken({ name: "Nah", pattern: /nah/ });
@@ -24,7 +24,6 @@ export const Cap = createToken({ name: "Cap", pattern: /cap/ });
 // Function declaration
 export const Do = createToken({ name: "Do", pattern: /do/ });
 export const Async = createToken({ name: "Async", pattern: /async/ });
-
 // Null / Undefined
 export const Ghost = createToken({ name: "Ghost", pattern: /ghost/ });
 export const Idk = createToken({ name: "Idk", pattern: /idk/ });
@@ -75,6 +74,8 @@ export const RParen = createToken({ name: "RParen", pattern: /\)/ });
 export const LBracket = createToken({ name: "LBracket", pattern: /\[/ });
 export const RBracket = createToken({ name: "RBracket", pattern: /\]/ });
 export const Comma = createToken({ name: "Comma", pattern: /,/ });
+export const Colon = createToken({ name: "Colon", pattern: /:/ });
+export const At = createToken({ name: "At", pattern: /@/ });
 
 export const NumberLiteral = createToken({
 	name: "NumberLiteral",
@@ -106,13 +107,15 @@ export const allTokens = [
 	LBracket,
 	RBracket,
 	Comma,
+  Colon,
+  At,
 
 	// Keywords
 	SameAs,
-	Vibe,
-	Lock,
-	Say,
-	Shout,
+	// Vibe,
+	// Lock,
+	// Say,
+	Yo,
 	If,
 	Nah,
 	Loop,

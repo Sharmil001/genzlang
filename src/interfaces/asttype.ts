@@ -10,6 +10,7 @@ export type ASTNode =
   | NullLiteral
   | UndefinedLiteral
   | ArrayLiteralNode
+  | ArrayAccessNode
   | BlockStatement
   | LoopStatement;
 export interface ProgramNode { type: "Program";
@@ -23,14 +24,13 @@ export interface SayExpression {
 
 export interface VariableDeclaration {
   type: "VariableDeclaration";
-  kind: "vibe" | "lock";
-  id: string;
+  name: string;
   init: ExpressionNode;
 }
 
 export interface LoopStatement {
   type: "LoopStatement";
-  body: StatementNode;
+  body: StatementNode[];
   start: ExpressionNode;
   end: ExpressionNode;
   loopType: string;
@@ -39,8 +39,8 @@ export interface LoopStatement {
 export interface ConditionalStatement {
   type: "ConditionalStatement";
   test: ExpressionNode;
-  consequent: StatementNode;
-  alternate: StatementNode | null;
+  consequent: StatementNode[];
+  alternate: StatementNode[] | null;
 }
 
 export interface BlockStatement {
@@ -75,6 +75,12 @@ export interface ArrayLiteralNode {
   elements: ExpressionNode[];
 }
 
+export interface ArrayAccessNode {
+  type: "ArrayAccess";
+  name: string;
+  index: ExpressionNode;
+}
+
 export interface NullLiteral {
   type: "NullLiteral";
   value: null;
@@ -97,6 +103,7 @@ export type ExpressionNode =
   | NumberLiteralNode
   | StringLiteralNode
   | ArrayLiteralNode
+  | ArrayAccessNode
   | NullLiteral
   | UndefinedLiteral;
   

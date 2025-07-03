@@ -7,24 +7,24 @@ export function generateJS(ast: ASTNode[]): string {
 function generateNode(node: ASTNode): string {
   switch (node.type) {
     case "SayExpression":
+      console.log(node);
       return `console.log(${generateExpression(node.value)});`;
     case "VariableDeclaration":
-      console.log(node);
-      return `${node.kind === "vibe" ? "let" : "const"} ${node.id} = ${generateExpression(node.init)};`;
+      return `let ${node.name} = ${generateExpression(node.init)};`;
     case "ConditionalStatement":
       return `if (${generateExpression(node.test)}) {
-        ${generateNode(node.consequent)}
+        ${node.consequent.map(generateNode)}
       }${node.alternate
           ? `
         else {
-          ${generateNode(node.alternate)}
+          ${node.alternate.map(generateNode)}
         }`
           : ""
         }`;
     case "LoopStatement":
       return node.loopType === "index"
-        ? `for (let i = ${generateExpression(node.start)}; i < ${generateExpression(node.end)}; i++) {${generateNode(node.body)}}`
-        : `for (const ${generateExpression(node.start)} of ${generateExpression(node.end)}) {${generateNode(node.body)}}`;
+        ? `for (let i = ${generateExpression(node.start)}; i < ${generateExpression(node.end)}; i++) {${node.body.map(generateNode)}}`
+        : `for (const ${generateExpression(node.start)} of ${generateExpression(node.end)}) {${node.body.map(generateNode)}}`;
     case "BlockStatement":
       return `${node.body.map((node) => generateNode(node)).join("\n")}`;
     default:
@@ -48,7 +48,9 @@ function generateExpression(expr: ASTNode): string | undefined | null {
       return `(${generateExpression(expr.left)} ${expr.operator} ${generateExpression(expr.right)})`;
     case "ArrayLiteral":
       return `[${expr.elements.map((e: ASTNode) => generateExpression(e)).join(", ")}]`;
+    case "ArrayAccess":
+      return `${expr.name}[${generateExpression(expr.index)}]`;
     default:
-      return "undefined";
+      return undefined;
   }
 }

@@ -1,7 +1,6 @@
 import { CstParser } from "chevrotain";
 import {
   allTokens,
-  Say,
   Assign,
   Plus,
   Minus,
@@ -12,9 +11,7 @@ import {
   Identifier,
   Modulo,
   Power,
-  Shout,
-  Vibe,
-  Lock,
+  Yo,
   If,
   Nah,
   GreaterThan,
@@ -24,8 +21,6 @@ import {
   Is,
   Aint,
   SameAs,
-  LBrace,
-  RBrace,
   LParen,
   RParen,
   Loop,
@@ -36,6 +31,8 @@ import {
   RBracket,
   Idk,
   Ghost,
+  Colon,
+  At,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -56,29 +53,23 @@ class GenZParser extends CstParser {
   });
 
   private sayStatement = this.RULE("sayStatement", () => {
-    this.OR([
-      { ALT: () => this.CONSUME(Say) },
-      { ALT: () => this.CONSUME(Shout) },
-    ]);
+    this.CONSUME(Yo)
     this.SUBRULE(this.expression);
   });
 
   private variableDeclaration = this.RULE("variableDeclaration", () => {
-    this.OR([
-      { ALT: () => this.CONSUME(Vibe) },
-      { ALT: () => this.CONSUME(Lock) },
-    ]);
     this.CONSUME(Identifier);
-    this.CONSUME(Assign);
-    this.SUBRULE(this.expression);
+    this.CONSUME(Assign); this.SUBRULE(this.expression);
   });
 
   private conditionalStatement = this.RULE("conditionalStatement", () => {
     this.CONSUME(If);
     this.SUBRULE1(this.expression);
+    this.CONSUME(Colon);
     this.SUBRULE2(this.statementOrBlock);
     this.OPTION(() => {
       this.CONSUME(Nah);
+      this.CONSUME2(Colon);
       this.SUBRULE3(this.statementOrBlock);
     });
   });
@@ -91,22 +82,14 @@ class GenZParser extends CstParser {
       { ALT: () => this.CONSUME(From) },
     ]);
     this.SUBRULE2(this.expression);
+    this.CONSUME(Colon);
     this.SUBRULE3(this.statementOrBlock);
   });
 
   private statementOrBlock = this.RULE("statementOrBlock", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.statement) },
-      { ALT: () => this.SUBRULE(this.block) },
-    ]);
-  });
-
-  private block = this.RULE("block", () => {
-    this.CONSUME(LBrace);
-    this.MANY(() => {
+    this.AT_LEAST_ONE(() => {
       this.SUBRULE(this.statement);
     });
-    this.CONSUME(RBrace);
   });
 
   private statement = this.RULE("statement", () => {
@@ -170,6 +153,7 @@ class GenZParser extends CstParser {
       { ALT: () => this.CONSUME(StringLiteral) },
       { ALT: () => this.CONSUME(Idk) },
       { ALT: () => this.CONSUME(Ghost) },
+      { ALT: () => this.SUBRULE(this.arrayAccess) },
       { ALT: () => this.CONSUME(Identifier) },
       {
         ALT: () => {
@@ -194,6 +178,12 @@ class GenZParser extends CstParser {
       });
     });
     this.CONSUME(RBracket);
+  });
+
+  private arrayAccess = this.RULE("arrayAccess", () => {
+    this.CONSUME(Identifier);
+    this.CONSUME(At);
+    this.SUBRULE(this.expression);
   });
 }
 
