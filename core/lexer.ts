@@ -65,24 +65,24 @@ export const Colon = createToken({ name: "Colon", pattern: /:/ });
 export const At = createToken({ name: "At", pattern: /@/ });
 
 export const NumberLiteral = createToken({
-	name: "NumberLiteral",
-	pattern: /\d+/,
+  name: "NumberLiteral",
+  pattern: /\d+/,
 });
 
 export const StringLiteral = createToken({
-	name: "StringLiteral",
-	pattern: /"[^"]*"/,
+  name: "StringLiteral",
+  pattern: /"[^"]*"/,
 });
 
 export const Identifier = createToken({
-	name: "Identifier",
-	pattern: /[a-zA-Z_]\w*/,
+  name: "Identifier",
+  pattern: /[a-zA-Z_]\w*/,
 });
 
 export const WhiteSpace = createToken({
-	name: "WhiteSpace",
-	pattern: /\s+/,
-	group: Lexer.SKIPPED,
+  name: "WhiteSpace",
+  pattern: /\s+/,
+  group: Lexer.SKIPPED,
 });
 
 export const allTokens = [

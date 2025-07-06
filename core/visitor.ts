@@ -53,7 +53,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   variableDeclaration(ctx: VariableDeclarationCstChildren): VariableDeclaration {
-    if(!ctx.Identifier?.[0]) throw new Error("Invalid variable declaration");
+    if (!ctx.Identifier?.[0]) throw new Error("Invalid variable declaration");
     return {
       type: "VariableDeclaration",
       name: ctx.Identifier[0].image,
@@ -62,7 +62,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   conditionalStatement(ctx: ConditionalStatementCstChildren): ConditionalStatement {
-    if(!ctx.statementOrBlock?.[0]) throw new Error("Invalid conditional statement");
+    if (!ctx.statementOrBlock?.[0]) throw new Error("Invalid conditional statement");
     return {
       type: "ConditionalStatement",
       test: this.visit(ctx.expression),
@@ -72,8 +72,8 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   loopStatement(ctx: LoopStatementCstChildren): LoopStatement {
-    if(!ctx.expression?.[0]) throw new Error("Invalid loop statement");
-    if(!ctx.expression?.[1]) throw new Error("Invalid loop statement");
+    if (!ctx.expression?.[0]) throw new Error("Invalid loop statement");
+    if (!ctx.expression?.[1]) throw new Error("Invalid loop statement");
     return {
       type: "LoopStatement",
       start: this.visit(ctx.expression[0]),
@@ -84,7 +84,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   statementOrBlock(ctx: StatementOrBlockCstChildren): StatementNode[] {
-    if(!ctx.statement?.[0]) throw new Error("Invalid statementOrBlock");
+    if (!ctx.statement?.[0]) throw new Error("Invalid statementOrBlock");
     return ctx.statement.map((stmt) => this.visit(stmt));
   }
 
@@ -107,14 +107,14 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   logicalExpression(ctx: LogicalExpressionCstChildren): ExpressionNode {
-    if(!ctx.logicalNotExpression?.[0]) throw new Error("Invalid logical expression");
+    if (!ctx.logicalNotExpression?.[0]) throw new Error("Invalid logical expression");
     let left = this.visit(ctx.logicalNotExpression[0]);
     for (let i = 0; i < (ctx.And?.length || 0) + (ctx.Or?.length || 0); i++) {
       const operatorToken = ctx.And?.[i] || ctx.Or?.[i];
-      if(!operatorToken) throw new Error("Invalid logical expression");
+      if (!operatorToken) throw new Error("Invalid logical expression");
       const operator = operatorToken.image === "and" ? "&&" : "||";
       const rightExpression = ctx.logicalNotExpression[i + 1];
-      if(!rightExpression) throw new Error("Invalid logical expression");
+      if (!rightExpression) throw new Error("Invalid logical expression");
       const right = this.visit(rightExpression);
       left = this.makeBinary(left, operator, right);
     }
@@ -127,7 +127,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   comparisonExpression(ctx: ComparisonExpressionCstChildren): ExpressionNode {
-    if(!ctx.additionExpression?.[0]) throw new Error("Invalid comparison expression");
+    if (!ctx.additionExpression?.[0]) throw new Error("Invalid comparison expression");
     const left = this.visit(ctx.additionExpression[0]);
     const right = ctx.additionExpression[1] ? this.visit(ctx.additionExpression[1]) : null;
 
@@ -142,70 +142,70 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren): ExpressionNode {
-    if(!ctx.multiplicationExpression?.[0]) throw new Error("Invalid addition expression");
+    if (!ctx.multiplicationExpression?.[0]) throw new Error("Invalid addition expression");
     let left = this.visit(ctx.multiplicationExpression[0]);
     for (let i = 0; i < (ctx.Plus?.length || 0) + (ctx.Minus?.length || 0); i++) {
       const opToken = ctx.Plus?.[i] || ctx.Minus?.[i];
       const rightExpression = ctx.multiplicationExpression[i + 1];
-      if(!rightExpression) throw new Error("Invalid addition expression");
+      if (!rightExpression) throw new Error("Invalid addition expression");
       const right = this.visit(rightExpression);
-      if(!opToken) throw new Error("Invalid addition expression");
+      if (!opToken) throw new Error("Invalid addition expression");
       left = this.makeBinary(left, opToken.image, right);
     }
     return left;
   }
 
   multiplicationExpression(ctx: MultiplicationExpressionCstChildren): ExpressionNode {
-    if(!ctx.atomicExpression?.[0]) throw new Error("Invalid multiplication expression");
+    if (!ctx.atomicExpression?.[0]) throw new Error("Invalid multiplication expression");
     let left = this.visit(ctx.atomicExpression[0]);
     const ops = [...(ctx.Multiply || []), ...(ctx.Divide || []), ...(ctx.Modulo || []), ...(ctx.Power || [])];
 
     for (let i = 0; i < ops.length; i++) {
       const opToken = ops[i];
       const rightExpression = ctx.atomicExpression[i + 1];
-      if(!rightExpression) throw new Error("Invalid multiplication expression");
+      if (!rightExpression) throw new Error("Invalid multiplication expression");
       const right = this.visit(rightExpression);
-      if(!opToken) throw new Error("Invalid multiplication expression");
+      if (!opToken) throw new Error("Invalid multiplication expression");
       left = this.makeBinary(left, opToken.image, right);
     }
     return left;
   }
 
   atomicExpression(ctx: AtomicExpressionCstChildren): ExpressionNode {
-  if (ctx.NumberLiteral?.[0]) {
-    return { type: "NumberLiteral", value: ctx.NumberLiteral[0].image };
-  }
+    if (ctx.NumberLiteral?.[0]) {
+      return { type: "NumberLiteral", value: ctx.NumberLiteral[0].image };
+    }
 
-  if (ctx.StringLiteral?.[0]) {
-    return { type: "StringLiteral", value: ctx.StringLiteral[0].image };
-  }
+    if (ctx.StringLiteral?.[0]) {
+      return { type: "StringLiteral", value: ctx.StringLiteral[0].image };
+    }
 
-  if (ctx.Idk?.[0]) {
-    return { type: "UndefinedLiteral", value: undefined };
-  }
+    if (ctx.Idk?.[0]) {
+      return { type: "UndefinedLiteral", value: undefined };
+    }
 
-  if (ctx.None?.[0]) {
-    return { type: "NullLiteral", value: null };
-  }
+    if (ctx.None?.[0]) {
+      return { type: "NullLiteral", value: null };
+    }
 
-  if (ctx.Identifier?.[0]) {
-    return { type: "Identifier", name: ctx.Identifier[0].image };
-  }
+    if (ctx.Identifier?.[0]) {
+      return { type: "Identifier", name: ctx.Identifier[0].image };
+    }
 
-  if (ctx.arrayLiteral?.[0]) {
-    return this.visit(ctx.arrayLiteral[0]);
-  }
+    if (ctx.arrayLiteral?.[0]) {
+      return this.visit(ctx.arrayLiteral[0]);
+    }
 
-  if (ctx.arrayAccess?.[0]) {
-    return this.visit(ctx.arrayAccess[0]);
-  }
+    if (ctx.arrayAccess?.[0]) {
+      return this.visit(ctx.arrayAccess[0]);
+    }
 
-  if (ctx.expression?.[0]) {
-    return this.visit(ctx.expression[0]);
-  }
+    if (ctx.expression?.[0]) {
+      return this.visit(ctx.expression[0]);
+    }
 
-  throw new Error("Invalid atomic expression");
-}
+    throw new Error("Invalid atomic expression");
+  }
 
   arrayLiteral(ctx: ArrayLiteralCstChildren): ExpressionNode {
     return {
@@ -215,7 +215,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   arrayAccess(ctx: ArrayAccessCstChildren): ExpressionNode {
-    if(!ctx?.Identifier?.[0]){
+    if (!ctx?.Identifier?.[0]) {
       throw new Error("Invalid array access");
     }
     return {
