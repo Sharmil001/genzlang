@@ -12,7 +12,6 @@ import {
   Modulo,
   Power,
   Yo,
-  If,
   Nah,
   LParen,
   RParen,
@@ -23,7 +22,6 @@ import {
   Comma,
   RBracket,
   Idk,
-  Ghost,
   Colon,
   At,
   SameVibe,
@@ -35,6 +33,8 @@ import {
   GreaterThanEqual,
   LessThan,
   LessThanEqual,
+  Fr,
+  None,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -66,7 +66,7 @@ class GenZParser extends CstParser {
   });
 
   private conditionalStatement = this.RULE("conditionalStatement", () => {
-    this.CONSUME(If);
+    this.CONSUME(Fr);
     this.SUBRULE1(this.expression);
     this.CONSUME(Colon);
     this.SUBRULE2(this.statementOrBlock);
@@ -172,7 +172,7 @@ class GenZParser extends CstParser {
       { ALT: () => this.CONSUME(NumberLiteral) },
       { ALT: () => this.CONSUME(StringLiteral) },
       { ALT: () => this.CONSUME(Idk) },
-      { ALT: () => this.CONSUME(Ghost) },
+      { ALT: () => this.CONSUME(None) },
       { ALT: () => this.SUBRULE(this.arrayAccess) },
       { ALT: () => this.CONSUME(Identifier) },
       {

@@ -42,7 +42,7 @@ export interface ConditionalStatementCstNode extends CstNode {
 }
 
 export type ConditionalStatementCstChildren = {
-  If: IToken[];
+  Fr: IToken[];
   expression: ExpressionCstNode[];
   statementOrBlock: StatementOrBlockCstNode[];
   Nah?: IToken[];
@@ -138,9 +138,9 @@ export type ComparisonExpressionCstChildren = {
   SameVibe?: IToken[];
   NotVibing?: IToken[];
   GreaterThan?: IToken[];
-  GreaterThanOrEqualTo?: IToken[];
+  GreaterThanEqual?: IToken[];
   LessThan?: IToken[];
-  LessThanOrEqualTo?: IToken[];
+  LessThanEqual?: IToken[];
 };
 
 export interface AdditionExpressionCstNode extends CstNode {
@@ -181,7 +181,7 @@ export type AtomicExpressionCstChildren = {
   RParen?: IToken[];
   arrayLiteral?: ArrayLiteralCstNode[];
   Idk?: IToken[];
-  Ghost?: IToken[];
+  None?: IToken[];
   arrayAccess?: ArrayAccessCstNode[];
 };
 

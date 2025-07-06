@@ -14,7 +14,6 @@ function interpreter(input: string) {
   const cst = parserInstance.program();
   const visitor = new ToAstVisitor();
   const ast = visitor.visit(cst);
-  console.dir(ast, { depth: null });
   const compiledjs = generateJS(ast);
   const distDir = path.resolve("dist");
   if (!fs.existsSync(distDir)) {

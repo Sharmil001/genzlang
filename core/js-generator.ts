@@ -7,7 +7,6 @@ export function generateJS(ast: ASTNode[]): string {
 function generateNode(node: ASTNode): string {
   switch (node.type) {
     case "SayExpression":
-      console.log(node);
       return `console.log(${generateExpression(node.value)});`;
     case "VariableDeclaration":
       return `let ${node.name} = ${generateExpression(node.init)};`;
@@ -45,7 +44,7 @@ function generateExpression(expr: ASTNode): string | undefined | null {
     case "Identifier":
       return expr.name;
     case "BinaryExpression":
-      return `(${generateExpression(expr.left)} ${expr.operator} ${generateExpression(expr.right)})`;
+      return `${generateExpression(expr.left)} ${expr.operator} ${generateExpression(expr.right)}`;
     case "UnaryExpression":
       return `(${expr.operator} ${generateExpression(expr.argument)})`;
     case "ArrayLiteral":
