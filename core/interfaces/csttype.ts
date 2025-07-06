@@ -135,18 +135,12 @@ export interface ComparisonExpressionCstNode extends CstNode {
 
 export type ComparisonExpressionCstChildren = {
   additionExpression: AdditionExpressionCstNode[];
+  SameVibe?: IToken[];
+  NotVibing?: IToken[];
   GreaterThan?: IToken[];
   GreaterThanOrEqualTo?: IToken[];
   LessThan?: IToken[];
   LessThanOrEqualTo?: IToken[];
-  Is?: IToken[];
-  Aint?: IToken[];
-  SameAs?: IToken[];
-  SameVibe?: IToken[];
-  Highkey?: IToken[];
-  NoCap?: IToken[];
-  Lowkey?: IToken[];
-  LowkeyMax?: IToken[];
 };
 
 export interface AdditionExpressionCstNode extends CstNode {

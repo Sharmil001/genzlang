@@ -189,14 +189,12 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
 
   comparisonExpression(ctx: ComparisonExpressionCstChildren): ExpressionNode {
     if (
-      !ctx?.Is ||
-      !ctx.Aint ||
-      !ctx.SameAs ||
+      !ctx?.SameVibe ||
+      !ctx.NotVibing ||
       !ctx.GreaterThan ||
       !ctx.GreaterThanOrEqualTo ||
       !ctx.LessThan ||
-      !ctx.LessThanOrEqualTo ||
-      !ctx.SameVibe
+      !ctx.LessThanOrEqualTo
     ) {
       throw new Error("Invalid comparison expression");
     }
@@ -216,33 +214,20 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
         this.visit(ctx.additionExpression[1]),
       );
     }
-    if (ctx.Aint) {
+    if (ctx.NotVibing) {
       return this.makeBinary(left, "!=", this.visit(ctx.additionExpression[1]));
     }
-    if (ctx.Highkey) {
+    if (ctx.GreaterThan) {
       return this.makeBinary(left, ">", this.visit(ctx.additionExpression[1]));
     }
-    if (ctx.NoCap) {
+    if (ctx.GreaterThanOrEqualTo) {
       return this.makeBinary(left, ">=", this.visit(ctx.additionExpression[1]));
     }
-    if (ctx.Lowkey) {
+    if (ctx.LessThan) {
       return this.makeBinary(left, "<", this.visit(ctx.additionExpression[1]));
     }
-    if (ctx.LowkeyMax) {
+    if (ctx.LessThanOrEqualTo) {
       return this.makeBinary(left, "<=", this.visit(ctx.additionExpression[1]));
-    }
-    if (ctx.Is) {
-      return this.makeBinary(left, "==", this.visit(ctx.additionExpression[1]));
-    }
-    if (ctx.Aint) {
-      return this.makeBinary(left, "!=", this.visit(ctx.additionExpression[1]));
-    }
-    if (ctx.SameAs) {
-      return this.makeBinary(
-        left,
-        "===",
-        this.visit(ctx.additionExpression[1]),
-      );
     }
 
     return left;

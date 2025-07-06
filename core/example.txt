@@ -54,3 +54,45 @@
   loop item from nums:
     yo "Number: " + item
     yo item + 1 "Added One"
+
+
+// add support for functions
+
+vibe mood():
+  yo "😎"
+
+
+lexer -> vibe
+indetifier -> mood
+round bracket -> ()
+colon -> :
+blockorstatment -> yo "😎"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,8 +14,6 @@ import {
   Yo,
   If,
   Nah,
-  Is,
-  Aint,
   LParen,
   RParen,
   Loop,
@@ -29,14 +27,14 @@ import {
   Colon,
   At,
   SameVibe,
-  Highkey,
-  NoCap,
-  Lowkey,
-  LowkeyMax,
-  NotSame,
   Not,
   And,
   Or,
+  NotVibing,
+  GreaterThan,
+  GreaterThanEqual,
+  LessThan,
+  LessThanEqual,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -131,14 +129,12 @@ class GenZParser extends CstParser {
     this.SUBRULE(this.additionExpression);
     this.OPTION(() => {
       this.OR([
-        { ALT: () => this.CONSUME(Is) },
         { ALT: () => this.CONSUME(SameVibe) },
-        { ALT: () => this.CONSUME(Aint) },
-        { ALT: () => this.CONSUME(NotSame) },
-        { ALT: () => this.CONSUME(Highkey) },
-        { ALT: () => this.CONSUME(NoCap) },
-        { ALT: () => this.CONSUME(Lowkey) },
-        { ALT: () => this.CONSUME(LowkeyMax) },
+        { ALT: () => this.CONSUME(NotVibing) },
+        { ALT: () => this.CONSUME(GreaterThan) },
+        { ALT: () => this.CONSUME(GreaterThanEqual) },
+        { ALT: () => this.CONSUME(LessThan) },
+        { ALT: () => this.CONSUME(LessThanEqual) },
       ]);
       this.SUBRULE2(this.additionExpression);
     });
