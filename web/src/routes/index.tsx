@@ -5,5 +5,5 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-	return <div className="flex items-center justify-center">GenZ Lang</div>;
+	return <div className="flex items-center justify-center">GenZ Lang 🚀</div>;
 }
