@@ -4,8 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev:web": "cd web && yarn dev",
-    "build:web": "cd web && yarn build",
+    "dev:web": "cd web && bun run dev",
+    "build:web": "cd web && bun run build",
     "dev:core": "cd core && bun run index.ts",
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
