@@ -13,7 +13,9 @@ export type ASTNode =
   | ArrayLiteralNode
   | ArrayAccessNode
   | BlockStatement
-  | LoopStatement;
+  | LoopStatement
+  | FunctionDeclaration
+  | FunctionCall;
 export interface ProgramNode { type: "Program";
   body: ASTNode[];
 }
@@ -96,6 +98,19 @@ export interface NullLiteral {
 export interface UndefinedLiteral {
   type: "UndefinedLiteral";
   value: undefined;
+}
+
+export interface FunctionDeclaration {
+  type: "FunctionDeclaration";
+  name: string;
+  params: string[];
+  body: StatementNode[];
+}
+
+export interface FunctionCall {
+  type: "FunctionCall";
+  name: string;
+  args: ExpressionNode[];
 }
 
 export type StatementNode =

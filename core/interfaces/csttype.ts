@@ -10,6 +10,7 @@ export type ProgramCstChildren = {
   variableDeclaration?: VariableDeclarationCstNode[];
   conditionalStatement?: ConditionalStatementCstNode[];
   loopStatement?: LoopStatementCstNode[];
+  functionDeclaration?: FunctionDeclarationCstNode[];
 };
 
 export interface SayStatementCstNode extends CstNode {
@@ -209,6 +210,36 @@ export type ArrayAccessCstChildren = {
   expression: ExpressionCstNode[];
 };
 
+export interface FunctionDeclarationCstNode extends CstNode {
+  name: "functionDeclaration";
+  children: FunctionDeclarationCstChildren;
+}
+
+export type FunctionDeclarationCstChildren = {
+  Vibe?: IToken[];
+  Identifier?: IToken[];
+  LParen?: IToken[];
+  parameterList?: CstNode[];
+  RParen?: IToken[];
+  Colon?: IToken[];
+  statementOrBlock: StatementOrBlockCstNode[];
+};
+
+export interface FunctionCallCstChildren {
+  Identifier?: IToken[];    
+  LParen?: IToken[];       
+  ArgumentList?: CstNode[];
+  RParen?: IToken[];      
+}
+
+export interface ParameterListCstChildren {
+  Identifier?: IToken[];
+}
+
+export interface ArgumentListCstChildren {
+  expression?: ExpressionCstNode[];
+}
+
 export interface IGenZVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   program(children: ProgramCstChildren, param?: IN): OUT;
   sayStatement(children: SayStatementCstChildren, param?: IN): OUT;
@@ -224,4 +255,6 @@ export interface IGenZVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   multiplicationExpression(children: MultiplicationExpressionCstChildren, param?: IN): OUT;
   atomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   arrayLiteral(children: ArrayLiteralCstChildren, param?: IN): OUT;
+  functionDeclaration(children: FunctionDeclarationCstChildren, param?: IN): OUT;
+  functionCall(children: FunctionCallCstChildren, param?: IN): OUT;
 }

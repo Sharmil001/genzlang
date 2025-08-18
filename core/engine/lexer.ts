@@ -17,8 +17,7 @@ export const Legit = createToken({ name: "Legit", pattern: /legit/ });
 export const Cap = createToken({ name: "Cap", pattern: /cap/ });
 
 // Function declaration
-export const Do = createToken({ name: "Do", pattern: /do/ });
-export const Async = createToken({ name: "Async", pattern: /async/ });
+export const Vibe = createToken({ name: "Vibe", pattern: /vibe/ });
 
 // Null / Undefined
 export const None = createToken({ name: "None", pattern: /None/ });
@@ -48,11 +47,20 @@ export const Power = createToken({ name: "Power", pattern: /\*\*/ });
 
 // Comparison Operators
 export const SameVibe = createToken({ name: "SameVibe", pattern: /same vibe/ }); // ==
-export const NotVibing = createToken({ name: "NotVibing", pattern: /not vibing/ }); // !=
+export const NotVibing = createToken({
+  name: "NotVibing",
+  pattern: /not vibing/,
+}); // !=
 export const GreaterThan = createToken({ name: "GreaterThan", pattern: />/ }); // >
-export const GreaterThanEqual = createToken({ name: "GreaterThanEqual", pattern: />=/ }); // >=
+export const GreaterThanEqual = createToken({
+  name: "GreaterThanEqual",
+  pattern: />=/,
+}); // >=
 export const LessThan = createToken({ name: "LessThan", pattern: /</ }); // <
-export const LessThanEqual = createToken({ name: "LessThanEqual", pattern: /<=/ }); // <=
+export const LessThanEqual = createToken({
+  name: "LessThanEqual",
+  pattern: /<=/,
+}); // <=
 
 export const LBrace = createToken({ name: "LBrace", pattern: /{/ });
 export const RBrace = createToken({ name: "RBrace", pattern: /}/ });
@@ -100,6 +108,9 @@ export const allTokens = [
   Colon,
   At,
 
+  // Functions
+  Vibe,
+
   // Comparison operators (longest first)
   SameVibe,
   NotVibing,
@@ -134,8 +145,6 @@ export const allTokens = [
   // Literals & reserved words
   Legit,
   Cap,
-  Do,
-  Async,
   None,
   Idk,
   Hold,

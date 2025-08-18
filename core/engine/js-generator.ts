@@ -26,6 +26,12 @@ function generateNode(node: ASTNode): string {
         : `for (const ${generateExpression(node.start)} of ${generateExpression(node.end)}) {${node.body.map(generateNode)}}`;
     case "BlockStatement":
       return `${node.body.map((node) => generateNode(node)).join("\n")}`;
+    case "FunctionDeclaration":
+      return `function ${node.name}(${node.params.join(", ")}) {
+        ${node.body.map(generateNode).join("\n")}
+      }`;
+    case "FunctionCall":
+      return `${node.name}(${node.args.map(generateExpression).join(", ")});`;
     default:
       return "undefined";
   }
@@ -51,6 +57,8 @@ function generateExpression(expr: ASTNode): string | undefined | null {
       return `[${expr.elements.map((e: ASTNode) => generateExpression(e)).join(", ")}]`;
     case "ArrayAccess":
       return `${expr.name}[${generateExpression(expr.index)}]`;
+    case "FunctionCall":
+      return `${expr.name}(${expr.args.map(generateExpression).join(", ")})`;
     default:
       return undefined;
   }

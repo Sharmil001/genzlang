@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
-import { generateJS } from "./js-generator";
-import { GenZLexer } from "./lexer";
-import { parserInstance } from "./parser";
-import { ToAstVisitor } from "./visitor";
+import { generateJS } from "./engine/js-generator";
+import { GenZLexer } from "./engine/lexer";
+import { parserInstance } from "./engine/parser";
+import { ToAstVisitor } from "./engine/visitor";
 
 const context = vm.createContext({ console });
 
-function interpreter(input: string) {
+export function interpreter(input: string) {
   try {
     // === 1. Lexing ===
     const lexResult = GenZLexer.tokenize(input);

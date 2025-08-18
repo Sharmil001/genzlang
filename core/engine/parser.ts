@@ -35,6 +35,7 @@ import {
   LessThanEqual,
   Fr,
   None,
+  Vibe,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -50,6 +51,7 @@ class GenZParser extends CstParser {
         { ALT: () => this.SUBRULE(this.variableDeclaration) },
         { ALT: () => this.SUBRULE(this.conditionalStatement) },
         { ALT: () => this.SUBRULE(this.loopStatement) },
+        { ALT: () => this.SUBRULE(this.functionDeclaration) },
       ]);
     });
   });
@@ -89,6 +91,43 @@ class GenZParser extends CstParser {
     this.SUBRULE3(this.statementOrBlock);
   });
 
+  private functionDeclaration = this.RULE("functionDeclaration", () => {
+    this.CONSUME(Vibe);
+    this.CONSUME(Identifier);
+    this.CONSUME(LParen);
+    this.OPTION(() => {
+      this.SUBRULE(this.parameterList);
+    });
+    this.CONSUME(RParen);
+    this.CONSUME(Colon);
+    this.SUBRULE(this.statementOrBlock);
+  });
+
+  private parameterList = this.RULE("parameterList", () => {
+    this.CONSUME(Identifier);
+    this.MANY(() => {
+      this.CONSUME(Comma);
+      this.CONSUME2(Identifier);
+    });
+  });
+
+  private functionCall = this.RULE("functionCall", () => {
+    this.CONSUME(Identifier);
+    this.CONSUME(LParen);
+    this.OPTION(() => {
+      this.SUBRULE(this.argumentList);
+    });
+    this.CONSUME(RParen);
+  });
+
+  private argumentList = this.RULE("argumentList", () => {
+    this.SUBRULE(this.expression);
+    this.MANY(() => {
+      this.CONSUME(Comma);
+      this.SUBRULE2(this.expression);
+    });
+  });
+
   private statementOrBlock = this.RULE("statementOrBlock", () => {
     this.AT_LEAST_ONE(() => {
       this.SUBRULE(this.statement);
@@ -100,6 +139,7 @@ class GenZParser extends CstParser {
       { ALT: () => this.SUBRULE(this.sayStatement) },
       { ALT: () => this.SUBRULE(this.variableDeclaration) },
       { ALT: () => this.SUBRULE(this.conditionalStatement) },
+      { ALT: () => this.SUBRULE(this.functionCall) },
     ]);
   });
 

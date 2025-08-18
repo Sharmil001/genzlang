@@ -3,10 +3,15 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "web",
+    "core"
+  ],
   "scripts": {
-    "dev:web": "cd web && bun run dev",
-    "build:web": "cd web && bun run build",
-    "dev:core": "cd core && bun run index.ts",
+    "dev:web": "bun run -C web dev",
+    "dev:core": "bun run -C core dev",
+    "build:web": "bun run -C web build",
+    "build:core": "bun run -C core build",
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
     "typecheck:be": "tsc --noEmit -p core"

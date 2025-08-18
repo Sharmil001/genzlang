@@ -9,9 +9,12 @@ import type {
   StatementNode,
   BinaryExpression,
   LoopStatement,
+  FunctionDeclaration,
+  FunctionCall,
 } from "./interfaces/asttype";
 import type {
   AdditionExpressionCstChildren,
+  ArgumentListCstChildren,
   ArrayAccessCstChildren,
   ArrayLiteralCstChildren,
   AtomicExpressionCstChildren,
@@ -19,10 +22,13 @@ import type {
   ComparisonExpressionCstChildren,
   ConditionalStatementCstChildren,
   ExpressionCstChildren,
+  FunctionCallCstChildren,
+  FunctionDeclarationCstChildren,
   LogicalExpressionCstChildren,
   LogicalNotExpressionCstChildren,
   LoopStatementCstChildren,
   MultiplicationExpressionCstChildren,
+  ParameterListCstChildren,
   ProgramCstChildren,
   SayStatementCstChildren,
   StatementCstChildren,
@@ -42,6 +48,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       ...(ctx.variableDeclaration?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.conditionalStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.loopStatement?.map((stmt) => this.visit(stmt)) || []),
+      ...(ctx.functionDeclaration?.map((stmt) => this.visit(stmt)) || []),
     ];
   }
 
@@ -82,6 +89,35 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       body: this.visit(ctx.statementOrBlock),
     };
   }
+  
+functionDeclaration(ctx: FunctionDeclarationCstChildren): FunctionDeclaration {
+  if (!ctx.Identifier?.[0]) throw new Error("Invalid function declaration");
+
+  return {
+    type: "FunctionDeclaration",
+    name: ctx.Identifier[0].image,
+ params: ctx.parameterList ? this.visit(ctx.parameterList?.[0] || []) : [],
+    body: this.visit(ctx.statementOrBlock),
+  };
+}
+
+functionCall(ctx: FunctionCallCstChildren): FunctionCall {
+  if (!ctx.Identifier?.[0]) throw new Error("Invalid function call");
+
+  return {
+    type: "FunctionCall",
+    name: ctx.Identifier[0].image,
+    args: ctx.ArgumentList && this.visit(ctx.ArgumentList?.[0] || []) || [],
+  };
+}
+
+parameterList(ctx: ParameterListCstChildren): string[] {
+  return ctx.Identifier ? ctx.Identifier.map((id) => id.image) : [];
+}
+
+argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
+  return ctx.expression ? ctx.expression.map((expr) => this.visit(expr)) : [];
+}
 
   statementOrBlock(ctx: StatementOrBlockCstChildren): StatementNode[] {
     if (!ctx.statement?.[0]) throw new Error("Invalid statementOrBlock");
