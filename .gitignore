@@ -1,34 +1,60 @@
-# dependencies (bun install)
-node_modules
+# ------------------------
+# Node / Bun dependencies
+# ------------------------
+node_modules/
+**/node_modules/
 
-# output
-out
-dist
+# ------------------------
+# Output / build folders
+# ------------------------
+out/
+dist/
+**/out/
+**/dist/
 *.tgz
 
-# code coverage
-coverage
+# ------------------------
+# Code coverage
+# ------------------------
+coverage/
+**/coverage/
 *.lcov
 
-# logs
-logs
-_.log
-report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+# ------------------------
+# Logs
+# ------------------------
+logs/
+*.log
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# dotenv environment variable files
+# ------------------------
+# Environment variable files
+# ------------------------
 .env
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 .env.local
 
-# caches
+# ------------------------
+# Caches
+# ------------------------
 .eslintcache
 .cache
 *.tsbuildinfo
+**/.cache
+**/*.tsbuildinfo
 
-# IntelliJ based IDEs
-.idea
-
-# Finder (MacOS) folder config
+# ------------------------
+# IDE / OS files
+# ------------------------
+.idea/
 .DS_Store
+
+# ------------------------
+# Ignore everything in core and web except src (optional)
+# ------------------------
+core/out/
+core/dist/
+core/node_modules/
+web/out/
+web/.next/
+web/node_modules/
