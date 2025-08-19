@@ -1,0 +1,100 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MonacoEditor from "../components/MonacoEditor.tsx";
+import { Sun, Zap } from "@lucide/astro";
+
+const title: string = "GenZ Lang 🚀";
+---
+
+<!-- import ThreeJSBackground from "../components/ThreeJSBackground.astro"; -->
+<html lang="en">
+	<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>GenZang | Next-Gen Programming Language for Gen Z</title>
+    <meta
+      name="title"
+      content="GenZang | Next-Gen Programming Language for Gen Z"
+    />
+    <meta
+      name="description"
+      content="GenZang is a fun, modern, and beginner-friendly programming language designed for the Gen Z mindset. Learn to code in a simple, relatable, and powerful way."
+    />
+    <meta
+      name="keywords"
+      content="GenZang, programming language, Gen Z, coding, beginner-friendly, modern language, learn to code"
+    />
+    <meta name="author" content="GenZang Team" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://genzang.dev/" />
+    <meta property="og:title" content="GenZang | Next-Gen Programming Language for Gen Z" />
+    <meta property="og:description" content="Learn coding the Gen Z way with GenZang — a modern, fun, and beginner-friendly programming language." />
+    <meta property="og:image" content="https://genzang.dev/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://genzang.dev/" />
+    <meta property="twitter:title" content="GenZang | Next-Gen Programming Language for Gen Z" />
+    <meta property="twitter:description" content="Learn coding the Gen Z way with GenZang a modern, fun, and beginner-friendly programming language." />
+    <meta property="twitter:image" content="https://genzang.dev/og-image.png" />
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://genzang.dev/" />
+
+    <!-- Structured Data (JSON-LD for rich snippets) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "GenZang",
+        "operatingSystem": "Any",
+        "applicationCategory": "DeveloperApplication",
+        "description": "GenZang is a fun, modern, and beginner-friendly programming language designed for the Gen Z mindset.",
+        "url": "https://genzang.dev/",
+        "author": {
+          "@type": "Organization",
+          "name": "Sharmil Adroja"
+        }
+      }
+    </script>
+  </head>
+	<body class="h-screen">
+    <!-- 3D Background -->
+    <!-- <ThreeJSBackground /> -->
+    <Header />
+    <div class="flex flex-col gap-2 pb-10">
+    <section class="container mx-auto p-6 text-center">
+      <div class="flex flex-col items-center justify-center gap-2">
+        <div class="flex flex-col items-center justify-center">
+          <h1 class="font-bold text-4xl xl:text-5xl">Not Just <span class="text-tertiary">Code</span>,</h1>
+          <div class="flex justify-center items-center text-center gap-1">
+            <h1 class="font-bold text-4xl xl:text-5xl">It's a Whole <span class="text-tertiary">Damn Vibe</span></h1>
+          </div>
+        </div>
+        <div class="flex items-center justify-center text-center gap-1">
+          <Zap class="w-6 h-6 text-tertiary" />
+          <h2 class="text-base xl:text-xl">A bold, expressive, <span class="text-tertiary">Gen Z inspired programming language</span></h2>
+          <Zap class="w-6 h-6 text-tertiary" />
+        </div>
+      </div>
+    </section>
+    <section class="w-full h-full">
+      <MonacoEditor client:only="react" />
+    </section>
+
+    </div>
+    <Footer />
+	</body>
+</html>

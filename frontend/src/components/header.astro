@@ -1,0 +1,55 @@
+---
+import { Sun, Moon } from "@lucide/astro";
+---
+
+<script>
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById("theme-toggle");
+
+  function setTheme(dark) {
+    if (dark) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
+
+  // Initialize theme on load
+  if (localStorage.getItem("theme") === "dark") {
+    setTheme(true);
+  } else {
+    setTheme(false);
+  }
+
+  // Toggle on click
+  toggleBtn?.addEventListener("click", () => {
+    setTheme(!root.classList.contains("dark"));
+  });
+</script>
+
+<div class="p-4 container mx-auto">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img src="/favicon.png" alt="GenZ Lang Logo" class="w-12 h-auto" />
+      <h2 class="font-bold text-2xl">GenZang</h2>
+    </div>
+    <div class="flex items-center gap-6">
+      <a
+        class="font-semibold text-tertiary"
+        href="https://genz-lang.gitbook.io/genz-lang-docs"
+        target="_blank"
+      >
+        Documentation
+      </a>
+      <a
+        class="font-semibold text-tertiary"
+        href="https://github.com/Sharmil001/genz-lang"
+        target="_blank"
+      >
+        Github
+      </a>
+    </div>
+  </div>
+</div>

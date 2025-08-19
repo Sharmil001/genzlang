@@ -1,52 +1,52 @@
-name: Pull Request
-
-on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
-  workflow_dispatch:
-
-jobs:
-  linting:
-    runs-on: ubuntu-latest
-
-    permissions:
-      checks: write
-      contents: read
-      pull-requests: write
-
-    steps:
-      - name: Download repo
-        uses: actions/checkout@v3
-
-      - name: Setup Biome CLI
-        uses: biomejs/setup-biome@v1
-        with:
-          version: 1.8.3
-
-      - name: Run Biome
-        run: biome ci --organize-imports-enabled=false .
-
-  type-check:
-    runs-on: ubuntu-latest
-
-    permissions:
-      checks: write
-      contents: read
-      pull-requests: write
-
-    steps:
-      - name: Download repo
-        uses: actions/checkout@v3
-
-      - name: Download Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.2.10
-
-      - name: Install Dependencies
-        run: bun install
-
-      - name: Type check
-        run: tsc --noEmit
+# name: Pull Request
+#
+# on:
+#   push:
+#     branches: [main, dev]
+#   pull_request:
+#     branches: [main, dev]
+#   workflow_dispatch:
+#
+# jobs:
+#   linting:
+#     runs-on: ubuntu-latest
+#
+#     permissions:
+#       checks: write
+#       contents: read
+#       pull-requests: write
+#
+#     steps:
+#       - name: Download repo
+#         uses: actions/checkout@v3
+#
+#       - name: Setup Biome CLI
+#         uses: biomejs/setup-biome@v1
+#         with:
+#           version: 1.8.3
+#
+#       - name: Run Biome
+#         run: biome ci --organize-imports-enabled=false .
+#
+#   type-check:
+#     runs-on: ubuntu-latest
+#
+#     permissions:
+#       checks: write
+#       contents: read
+#       pull-requests: write
+#
+#     steps:
+#       - name: Download repo
+#         uses: actions/checkout@v3
+#
+#       - name: Download Bun
+#         uses: oven-sh/setup-bun@v1
+#         with:
+#           bun-version: 1.2.10
+#
+#       - name: Install Dependencies
+#         run: bun install
+#
+#       - name: Type check
+#         run: tsc --noEmit

@@ -1,11 +1,12 @@
 {
-	"extends": "../tsconfig.json",
-	"include": ["**/*.ts", "**/*.tsx"],
+	"extends": ["../tsconfig.json", "astro/tsconfigs/strict"],
+	"include": [".astro/types.d.ts", "**/*"],
 	"compilerOptions": {
 		"target": "ES2022",
 		"jsx": "react-jsx",
 		"module": "ESNext",
 		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"types": ["vite/client"]
-	}
+	},
+	"exclude": ["dist"]
 }
