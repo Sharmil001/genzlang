@@ -4,13 +4,13 @@
   "type": "module",
   "private": true,
   "workspaces": [
-    "web",
+    "frontend",
     "core"
   ],
   "scripts": {
-    "dev:web": "bun run --cwd web dev",
+    "dev:frontend": "bun run --cwd frontend dev",
     "dev:core": "bun run --cwd core dev",
-    "build:web": "bun run --cwd web build",
+    "build:frontend": "bun run --cwd frontend build",
     "build:core": "bun run --cwd core build",
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
