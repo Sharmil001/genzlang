@@ -5,14 +5,20 @@ import { Sun, Moon } from "@lucide/astro";
 <script>
   const root = document.documentElement;
   const toggleBtn = document.getElementById("theme-toggle");
+  const sunIcon = document.getElementById("sun-icon");
+  const moonIcon = document.getElementById("moon-icon");
 
   function setTheme(dark) {
     if (dark) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
+      sunIcon.classList.remove("hidden");
+      moonIcon.classList.add("hidden");
     } else {
       root.classList.remove("dark");
       localStorage.setItem("theme", "light");
+      sunIcon.classList.add("hidden");
+      moonIcon.classList.remove("hidden");
     }
   }
 
@@ -50,6 +56,13 @@ import { Sun, Moon } from "@lucide/astro";
       >
         Github
       </a>
+      <div
+        class="flex items-center justify-center rounded-sm cursor-pointer"
+        id="theme-toggle"
+      >
+        <Sun id="sun-icon" class="hidden w-5 h-5" />
+        <Moon id="moon-icon" class="w-5 h-5" />
+      </div>
     </div>
   </div>
 </div>
