@@ -11,7 +11,7 @@ import type {
   LoopStatement,
   FunctionDeclaration,
   FunctionCall,
-} from "./interfaces/asttype";
+} from "../interfaces/asttype";
 import type {
   AdditionExpressionCstChildren,
   ArgumentListCstChildren,
@@ -34,7 +34,7 @@ import type {
   StatementCstChildren,
   StatementOrBlockCstChildren,
   VariableDeclarationCstChildren,
-} from "./interfaces/csttype";
+} from "../interfaces/csttype";
 
 export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   constructor() {
@@ -59,7 +59,9 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     };
   }
 
-  variableDeclaration(ctx: VariableDeclarationCstChildren): VariableDeclaration {
+  variableDeclaration(
+    ctx: VariableDeclarationCstChildren
+  ): VariableDeclaration {
     if (!ctx.Identifier?.[0]) throw new Error("Invalid variable declaration");
     return {
       type: "VariableDeclaration",
@@ -68,13 +70,19 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     };
   }
 
-  conditionalStatement(ctx: ConditionalStatementCstChildren): ConditionalStatement {
-    if (!ctx.statementOrBlock?.[0]) throw new Error("Invalid conditional statement");
+  conditionalStatement(
+    ctx: ConditionalStatementCstChildren
+  ): ConditionalStatement {
+    if (!ctx.statementOrBlock?.[0])
+      throw new Error("Invalid conditional statement");
     return {
       type: "ConditionalStatement",
       test: this.visit(ctx.expression),
       consequent: this.visit(ctx.statementOrBlock[0]),
-      alternate: ctx.Nah && ctx.statementOrBlock?.[1] ? this.visit(ctx.statementOrBlock[1]) : null,
+      alternate:
+        ctx.Nah && ctx.statementOrBlock?.[1]
+          ? this.visit(ctx.statementOrBlock[1])
+          : null,
     };
   }
 
@@ -89,35 +97,37 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       body: this.visit(ctx.statementOrBlock),
     };
   }
-  
-functionDeclaration(ctx: FunctionDeclarationCstChildren): FunctionDeclaration {
-  if (!ctx.Identifier?.[0]) throw new Error("Invalid function declaration");
 
-  return {
-    type: "FunctionDeclaration",
-    name: ctx.Identifier[0].image,
- params: ctx.parameterList ? this.visit(ctx.parameterList?.[0] || []) : [],
-    body: this.visit(ctx.statementOrBlock),
-  };
-}
+  functionDeclaration(
+    ctx: FunctionDeclarationCstChildren
+  ): FunctionDeclaration {
+    if (!ctx.Identifier?.[0]) throw new Error("Invalid function declaration");
 
-functionCall(ctx: FunctionCallCstChildren): FunctionCall {
-  if (!ctx.Identifier?.[0]) throw new Error("Invalid function call");
+    return {
+      type: "FunctionDeclaration",
+      name: ctx.Identifier[0].image,
+      params: ctx.parameterList ? this.visit(ctx.parameterList?.[0] || []) : [],
+      body: this.visit(ctx.statementOrBlock),
+    };
+  }
 
-  return {
-    type: "FunctionCall",
-    name: ctx.Identifier[0].image,
-    args: ctx.ArgumentList && this.visit(ctx.ArgumentList?.[0] || []) || [],
-  };
-}
+  functionCall(ctx: FunctionCallCstChildren): FunctionCall {
+    if (!ctx.Identifier?.[0]) throw new Error("Invalid function call");
 
-parameterList(ctx: ParameterListCstChildren): string[] {
-  return ctx.Identifier ? ctx.Identifier.map((id) => id.image) : [];
-}
+    return {
+      type: "FunctionCall",
+      name: ctx.Identifier[0].image,
+      args: (ctx.ArgumentList && this.visit(ctx.ArgumentList?.[0] || [])) || [],
+    };
+  }
 
-argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
-  return ctx.expression ? ctx.expression.map((expr) => this.visit(expr)) : [];
-}
+  parameterList(ctx: ParameterListCstChildren): string[] {
+    return ctx.Identifier ? ctx.Identifier.map((id) => id.image) : [];
+  }
+
+  argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
+    return ctx.expression ? ctx.expression.map((expr) => this.visit(expr)) : [];
+  }
 
   statementOrBlock(ctx: StatementOrBlockCstChildren): StatementNode[] {
     if (!ctx.statement?.[0]) throw new Error("Invalid statementOrBlock");
@@ -143,7 +153,8 @@ argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
   }
 
   logicalExpression(ctx: LogicalExpressionCstChildren): ExpressionNode {
-    if (!ctx.logicalNotExpression?.[0]) throw new Error("Invalid logical expression");
+    if (!ctx.logicalNotExpression?.[0])
+      throw new Error("Invalid logical expression");
     let left = this.visit(ctx.logicalNotExpression[0]);
     for (let i = 0; i < (ctx.And?.length || 0) + (ctx.Or?.length || 0); i++) {
       const operatorToken = ctx.And?.[i] || ctx.Or?.[i];
@@ -159,13 +170,18 @@ argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
 
   logicalNotExpression(ctx: LogicalNotExpressionCstChildren): ExpressionNode {
     const expr = this.visit(ctx.comparisonExpression);
-    return ctx.Not ? { type: "UnaryExpression", operator: "!", argument: expr } : expr;
+    return ctx.Not
+      ? { type: "UnaryExpression", operator: "!", argument: expr }
+      : expr;
   }
 
   comparisonExpression(ctx: ComparisonExpressionCstChildren): ExpressionNode {
-    if (!ctx.additionExpression?.[0]) throw new Error("Invalid comparison expression");
+    if (!ctx.additionExpression?.[0])
+      throw new Error("Invalid comparison expression");
     const left = this.visit(ctx.additionExpression[0]);
-    const right = ctx.additionExpression[1] ? this.visit(ctx.additionExpression[1]) : null;
+    const right = ctx.additionExpression[1]
+      ? this.visit(ctx.additionExpression[1])
+      : null;
 
     if (ctx.SameVibe) return this.makeBinary(left, "==", right);
     if (ctx.NotVibing) return this.makeBinary(left, "!=", right);
@@ -178,9 +194,14 @@ argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren): ExpressionNode {
-    if (!ctx.multiplicationExpression?.[0]) throw new Error("Invalid addition expression");
+    if (!ctx.multiplicationExpression?.[0])
+      throw new Error("Invalid addition expression");
     let left = this.visit(ctx.multiplicationExpression[0]);
-    for (let i = 0; i < (ctx.Plus?.length || 0) + (ctx.Minus?.length || 0); i++) {
+    for (
+      let i = 0;
+      i < (ctx.Plus?.length || 0) + (ctx.Minus?.length || 0);
+      i++
+    ) {
       const opToken = ctx.Plus?.[i] || ctx.Minus?.[i];
       const rightExpression = ctx.multiplicationExpression[i + 1];
       if (!rightExpression) throw new Error("Invalid addition expression");
@@ -191,15 +212,24 @@ argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
     return left;
   }
 
-  multiplicationExpression(ctx: MultiplicationExpressionCstChildren): ExpressionNode {
-    if (!ctx.atomicExpression?.[0]) throw new Error("Invalid multiplication expression");
+  multiplicationExpression(
+    ctx: MultiplicationExpressionCstChildren
+  ): ExpressionNode {
+    if (!ctx.atomicExpression?.[0])
+      throw new Error("Invalid multiplication expression");
     let left = this.visit(ctx.atomicExpression[0]);
-    const ops = [...(ctx.Multiply || []), ...(ctx.Divide || []), ...(ctx.Modulo || []), ...(ctx.Power || [])];
+    const ops = [
+      ...(ctx.Multiply || []),
+      ...(ctx.Divide || []),
+      ...(ctx.Modulo || []),
+      ...(ctx.Power || []),
+    ];
 
     for (let i = 0; i < ops.length; i++) {
       const opToken = ops[i];
       const rightExpression = ctx.atomicExpression[i + 1];
-      if (!rightExpression) throw new Error("Invalid multiplication expression");
+      if (!rightExpression)
+        throw new Error("Invalid multiplication expression");
       const right = this.visit(rightExpression);
       if (!opToken) throw new Error("Invalid multiplication expression");
       left = this.makeBinary(left, opToken.image, right);
@@ -261,7 +291,11 @@ argumentList(ctx: ArgumentListCstChildren): ExpressionNode[] {
     };
   }
 
-  makeBinary(left: ExpressionNode, operator: string, right: ExpressionNode): BinaryExpression {
+  makeBinary(
+    left: ExpressionNode,
+    operator: string,
+    right: ExpressionNode
+  ): BinaryExpression {
     return { type: "BinaryExpression", operator, left, right };
   }
 }

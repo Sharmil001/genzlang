@@ -45,7 +45,9 @@ export interface ConditionalStatementCstNode extends CstNode {
 export type ConditionalStatementCstChildren = {
   Fr: IToken[];
   expression: ExpressionCstNode[];
+  LBrace: IToken[];
   statementOrBlock: StatementOrBlockCstNode[];
+  RBrace: IToken[];
   Nah?: IToken[];
 };
 

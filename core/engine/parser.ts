@@ -36,6 +36,8 @@ import {
   Fr,
   None,
   Vibe,
+  LBrace,
+  RBrace,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -70,12 +72,14 @@ class GenZParser extends CstParser {
   private conditionalStatement = this.RULE("conditionalStatement", () => {
     this.CONSUME(Fr);
     this.SUBRULE1(this.expression);
-    this.CONSUME(Colon);
+    this.CONSUME(LBrace);
     this.SUBRULE2(this.statementOrBlock);
+    this.CONSUME(RBrace);
     this.OPTION(() => {
       this.CONSUME(Nah);
-      this.CONSUME2(Colon);
+      this.CONSUME2(LBrace);
       this.SUBRULE3(this.statementOrBlock);
+      this.CONSUME2(RBrace);
     });
   });
 
@@ -87,8 +91,9 @@ class GenZParser extends CstParser {
       { ALT: () => this.CONSUME(From) },
     ]);
     this.SUBRULE2(this.expression);
-    this.CONSUME(Colon);
+    this.CONSUME(LBrace);
     this.SUBRULE3(this.statementOrBlock);
+    this.CONSUME(RBrace);
   });
 
   private functionDeclaration = this.RULE("functionDeclaration", () => {
@@ -99,8 +104,9 @@ class GenZParser extends CstParser {
       this.SUBRULE(this.parameterList);
     });
     this.CONSUME(RParen);
-    this.CONSUME(Colon);
+    this.CONSUME(LBrace);
     this.SUBRULE(this.statementOrBlock);
+    this.CONSUME(RBrace);
   });
 
   private parameterList = this.RULE("parameterList", () => {
@@ -204,7 +210,7 @@ class GenZParser extends CstParser {
         ]);
         this.SUBRULE2(this.atomicExpression);
       });
-    },
+    }
   );
 
   private atomicExpression = this.RULE("atomicExpression", () => {

@@ -1,8 +1,11 @@
 "use client";
-import { useEffect, useRef } from "react";
+import * as monaco from "monaco-editor";
+import { useEffect, useRef, useState } from "react";
 
 export default function MonacoEditor() {
   const editorRef = useRef<HTMLDivElement | null>(null);
+  const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [output, setOutput] = useState(`You straight vibin' 🔥`);
 
   useEffect(() => {
     const loadMonaco = async () => {
@@ -100,15 +103,14 @@ export default function MonacoEditor() {
 
       const editor = monaco.editor.create(editorRef.current, {
         value: [
-          "// write your GenZ code here",
           'mood = "😎"',
           "",
-          "fr mood same vibe '😎':",
-          '  yo \"You straight vibin\' 🔥\"',
-          "} nah:",
-          '  yo \"Keep your head up, fam 💪😅\"',
+          'fr mood same vibe "😎"{',
+          '  yo "You straight vibin\' 🔥"',
           "}",
-          "",
+          "nah {",
+          '  yo "Keep your head up, fam 💪😅"',
+          "}",
         ].join("\n"),
         language: "genz",
         theme: "genzBlock",
@@ -126,11 +128,29 @@ export default function MonacoEditor() {
         renderLineHighlight: "line",
       });
 
+      monacoRef.current = editor;
       editor.focus();
     };
 
     loadMonaco();
   }, []);
+
+  const run = async () => {
+    if (!monacoRef.current) return;
+    const editorValue = monacoRef.current.getValue();
+
+    const res = await fetch("http://localhost:3000/api/interpreter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code: editorValue }),
+    });
+
+    const data = await res.json();
+    if (data.error) console.error(data.error);
+    else setOutput(data.output);
+  };
 
   return (
     <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto p-4 min-h-80 h-full">
@@ -144,9 +164,9 @@ export default function MonacoEditor() {
           <div className="flex items-end justify-end">
             <button
               className="text-primary text-lg font-bold px-6 py-1 border-2 rounded-lg bg-orange-400 hover:bg-orange-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled
+              onClick={run}
             >
-              Run 
+              Run
             </button>
           </div>
         </div>
@@ -157,9 +177,7 @@ export default function MonacoEditor() {
           <span className="text-xs text-gray-500">Teminal</span>
         </div>
         <div className="flex-1 p-4 overflow-y-auto">
-          <pre className="whitespace-pre-wrap">
-            {`You straight vibin' 🔥`}
-          </pre>
+          <pre className="whitespace-pre-wrap">{output}</pre>
         </div>
       </div>
     </div>
