@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     // ==== Lexing ====
     const lexResult = GenZLexer.tokenize(code);
     if (lexResult.errors.length > 0) {
+
       const lexPrefix = genZErrorMessage("lex", lexResult.errors[0]);
       return NextResponse.json({
         output: `[${lexPrefix}] ${lexResult.errors[0]?.message}`,

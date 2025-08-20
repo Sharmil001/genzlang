@@ -1,6 +1,18 @@
-export function genZErrorMessage(type: "lex" | "parse" | "runtime", error: any): string {
-  const line = error?.token?.startLine ?? error?.line ?? "??";
-  const col = error?.token?.startColumn ?? error?.column ?? "??";
+interface ErrorMessage {
+  token?: {
+    startLine?: number;
+    startColumn?: number;
+  };
+  line?: number;
+  column?: number;
+  message?: string;
+  [key: string]: unknown;
+}
+
+export function genZErrorMessage(type: "lex" | "parse" | "runtime", error: ErrorMessage | unknown): string {
+  const errorObj = (error && typeof error === 'object') ? error as ErrorMessage : {};
+  const line = errorObj?.token?.startLine ?? errorObj?.line ?? "??";
+  const col = errorObj?.token?.startColumn ?? errorObj?.column ?? "??";
 
   const lexMessages = [
     `📉 Bruh, fix yo' grammar`,
@@ -15,9 +27,9 @@ export function genZErrorMessage(type: "lex" | "parse" | "runtime", error: any):
   ];
 
   const runtimeMessages = [
-    `🔥 Code blew up at runtime fam: ${error?.message ?? "Unknown crash"}`,
-    `🤡 JS engine tripped over: ${error?.message ?? "??"}`,
-    `🚨 Broke reality at runtime: ${error?.message ?? "??"}`
+    `🔥 Code blew up at runtime fam: ${errorObj?.message ?? "Unknown crash"}`,
+    `🤡 JS engine tripped over: ${errorObj?.message ?? "??"}`,
+    `🚨 Broke reality at runtime: ${errorObj?.message ?? "??"}`
   ];
 
   const pool =
@@ -33,4 +45,4 @@ export const errorMessages = {
   "noOutput": "😤 Yo fam, gimme some output to see.",
   "syntaxError": "🧨 Syntax Error",
   "runtimeError": "🔥 Code blew up at runtime fam",
-}
+} as const;

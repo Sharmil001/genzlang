@@ -33,7 +33,6 @@ export const metadata: Metadata = {
     "learn to code",
   ],
   authors: [{ name: "Sharmil Adroja" }],
-  themeColor: "#000000",
   openGraph: {
     type: "website",
     url: "https://genzang.dev/",

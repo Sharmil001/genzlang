@@ -35,9 +35,11 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-button-bg: oklch(0.75 0.166 66.6);
+
   /* terminal */
-  --color-terminal-background: oklch(0.23 0 0);
-  --color-terminal-foreground: oklch(0.824 0.099 136.65);
+  --color-terminal-background: var(--terminal-background);
+  --color-terminal-foreground: var(--terminal-foreground);
   --color-mono-bg: var(--mono-bg);
   --color-mono-fg: var(--mono-fg);
   --color-mono-keyword: var(--mono-keyword);
@@ -81,6 +83,7 @@
   --secondary-foreground: oklch(0.205 0 0);
 
   --tertiary: oklch(0.69 0.18 50.62);
+  /* --tertiary: oklch(0.61 0.08 62.81); */
 
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -91,9 +94,12 @@
   --destructive: oklch(0.577 0.245 27.325);
 
   --border: oklch(0.922 0 0);
-  --border-secondary: oklch(0.34 0.02 60.72);
+  --border-secondary: oklch(0.92 0.02 65.04);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+
+  --terminal-background: oklch(1 0 0);
+  --terminal-foreground: oklch(0.61 0.08 62.81);
 
   /* Monaco Editor - Light Mode */
   --monaco-bg: #fafafa;
@@ -146,6 +152,8 @@
   --border-secondary: oklch(0.34 0.02 60.72);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  --terminal-background: oklch(0.23 0 0);
+  --terminal-foreground: oklch(0.824 0.099 136.65);
 
   /* Monaco Editor - Dark Mode */
   --monaco-bg: #1d1d1d;

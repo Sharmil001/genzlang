@@ -1,54 +1,191 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import * as monaco from "monaco-editor";
 import type { ResponseData } from "../app/api/interpreter/route";
+
+interface MonacoRequire {
+  (deps: string[], callback: () => void): void;
+  config: (options: { paths: { vs: string } }) => void;
+}
+
+declare global {
+  interface Window {
+    monaco?: typeof monaco;
+    require?: MonacoRequire;
+  }
+}
 
 export default function MonacoEditor() {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [output, setOutput] = useState("You straight vibin\' 🔥");
-  const initialCode = [
-    'mood = "😎"',
-    "",
-    'fr mood same vibe "😎" {',
-    ' yo "You straight vibin\' 🔥"',
-    "}",
-    "nah {",
-    ' yo "Keep your head up, fam 💪😅"',
-    "}",
-  ].join("\n");
+  const [output, setOutput] = useState("You straight vibin' 🔥");
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const initialCode = useCallback(
+    () =>
+      [
+        'mood = "😎"',
+        "",
+        'fr mood same vibe "😎" {',
+        ' yo "You straight vibin\' 🔥"',
+        "}",
+        "nah {",
+        ' yo "Keep your head up, fam 💪😅"',
+        "}",
+      ].join("\n"),
+    []
+  );
+
+  const getCSSVariable = useCallback((variable: string): string => {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(variable)
+      .trim();
+  }, []);
+
+  const createDynamicTheme = useCallback(
+    (themeName: string, isDark: boolean) => {
+      if (!window.monaco) return;
+
+      const monacoInstance = window.monaco;
+
+      const theme = {
+        base: isDark ? "vs-dark" : "vs",
+        inherit: true,
+        rules: [
+          {
+            token: "keyword",
+            foreground: getCSSVariable("--monaco-keyword").replace("#", ""),
+            fontStyle: "bold",
+          },
+          {
+            token: "operator",
+            foreground: getCSSVariable("--monaco-operator").replace("#", ""),
+          },
+          {
+            token: "identifier",
+            foreground: getCSSVariable("--monaco-identifier").replace("#", ""),
+          },
+          {
+            token: "number",
+            foreground: getCSSVariable("--monaco-number").replace("#", ""),
+          },
+          {
+            token: "string",
+            foreground: getCSSVariable("--monaco-string").replace("#", ""),
+          },
+          {
+            token: "comment",
+            foreground: getCSSVariable("--monaco-comment").replace("#", ""),
+          },
+        ],
+        colors: {
+          "editor.background": getCSSVariable("--monaco-bg"),
+          "editor.foreground": getCSSVariable("--monaco-fg"),
+          "editorLineNumber.foreground": getCSSVariable("--monaco-line-number"),
+          "editorCursor.foreground": getCSSVariable("--monaco-cursor"),
+          "editorIndentGuide.background": getCSSVariable(
+            "--monaco-indent-guide"
+          ),
+          "editor.selectionBackground": getCSSVariable("--monaco-selection"),
+          "editor.lineHighlightBackground": getCSSVariable(
+            "--monaco-line-highlight"
+          ),
+          "editorOverviewRuler.border": getCSSVariable("--monaco-ruler-border"),
+          "editorGutter.background": getCSSVariable("--monaco-gutter-bg"),
+          "editor.inactiveSelectionBackground": getCSSVariable(
+            "--monaco-inactive-selection"
+          ),
+          "editorWidget.background": getCSSVariable("--monaco-widget-bg"),
+          "editorWidget.border": getCSSVariable("--monaco-widget-border"),
+        },
+      } as monaco.editor.IStandaloneThemeData;
+
+      monacoInstance.editor.defineTheme(themeName, theme);
+      monacoInstance.editor.setTheme(themeName);
+    },
+    [getCSSVariable]
+  );
+
+  useEffect(() => {
+    const detectTheme = () => {
+      const isDark =
+        document.documentElement.classList.contains("dark") ||
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setIsDarkMode(isDark);
+
+      if (window.monaco && monacoRef.current) {
+        createDynamicTheme("genzBlock", isDark);
+      }
+    };
+
+    detectTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "class"
+        ) {
+          detectTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleMediaChange = () => detectTheme();
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener("change", handleMediaChange);
+    };
+  }, [createDynamicTheme]);
 
   // Initialize Monaco Editor
   useEffect(() => {
     const loadMonaco = async () => {
-      if ((window as any).monaco) {
+      if (window.monaco) {
         createEditor();
         return;
       }
 
-      const requireConfig = {
-        paths: {
-          vs: "https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs",
-        },
-      };
-      (window as any).require = requireConfig;
+      // prevent injecting loader multiple times
+      if (document.getElementById("monaco-loader")) {
+        return;
+      }
 
-      const loaderScript = document.createElement("script");
-      loaderScript.src =
+      const script = document.createElement("script");
+      script.id = "monaco-loader";
+      script.src =
         "https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/loader.js";
-      loaderScript.onload = () => {
-        (window as any).require(["vs/editor/editor.main"], () => {
-          createEditor();
-        });
+
+      script.onload = () => {
+        if (window.require) {
+          window.require.config({
+            paths: {
+              vs: "https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs",
+            },
+          });
+
+          window.require(["vs/editor/editor.main"], () => {
+            createEditor();
+          });
+        }
       };
-      document.body.appendChild(loaderScript);
+
+      document.head.appendChild(script);
     };
 
     const createEditor = () => {
-      if (!editorRef.current) return;
+      if (!editorRef.current || !window.monaco) return;
 
-      const monacoInstance = (window as any).monaco;
+      const monacoInstance = window.monaco;
 
       monacoInstance.languages.register({ id: "genz" });
 
@@ -89,32 +226,10 @@ export default function MonacoEditor() {
         },
       });
 
-      monacoInstance.editor.defineTheme("genzBlock", {
-        base: "vs-dark",
-        inherit: true,
-        rules: [
-          { token: "keyword", foreground: "F8A8A1", fontStyle: "bold" },
-          { token: "operator", foreground: "F8A8A1" },
-          { token: "identifier", foreground: "E0B891" },
-          { token: "number", foreground: "E0B891" },
-          { token: "string", foreground: "9BD0A1" },
-        ],
-        colors: {
-          "editor.background": "#1d1d1d",
-          "editor.foreground": "#E0B891",
-          "editorLineNumber.foreground": "#3c3c3c",
-          "editorCursor.foreground": "#F8A8A1",
-          "editorIndentGuide.background": "#2b2b2b",
-          "editor.selectionBackground": "#333333",
-          "editor.lineHighlightBackground": "#222222",
-          "editorOverviewRuler.border": "#1d1d1d",
-        },
-      });
-
-      monacoInstance.editor.setTheme("genzBlock");
+      createDynamicTheme("genzBlock", isDarkMode);
 
       const editor = monacoInstance.editor.create(editorRef.current, {
-        value: initialCode,
+        value: initialCode(),
         language: "genz",
         theme: "genzBlock",
         fontFamily: "JetBrains Mono, Fira Code, monospace",
@@ -136,7 +251,7 @@ export default function MonacoEditor() {
     };
 
     loadMonaco();
-  }, []);
+  }, [initialCode, createDynamicTheme, isDarkMode]);
 
   const runCode = async () => {
     if (!monacoRef.current) return;
@@ -148,7 +263,7 @@ export default function MonacoEditor() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
-      const data = await res.json() as ResponseData;
+      const data = (await res.json()) as ResponseData;
       setOutput(data?.output || "No output");
     } catch (err) {
       console.error(err);
@@ -159,17 +274,20 @@ export default function MonacoEditor() {
   return (
     <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto min-h-[400px] h-full text-start">
       {/* Editor */}
-      <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background">
+      <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background flex flex-col">
         <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary">
-          <h5 className="font-semibold text-gray-300">Playground</h5>
+          <h5 className="font-bold text-gray-800 dark:text-gray-300">Playground</h5>
           <span className="text-xs text-gray-500">GenZ Editor</span>
         </div>
-        <div className="flex flex-col gap-4 p-2">
-          <div ref={editorRef} className="w-full min-h-[300px] h-full" />
+        <div className="flex flex-col gap-4 p-2 flex-1">
+          {/* wrapper fixes hydration warning */}
+          <div className="flex-1 min-h-[300px]">
+            <div ref={editorRef} className="w-full h-full" />
+          </div>
           <div className="flex justify-end">
             <button
               type="submit"
-              className="text-primary text-lg font-bold px-6 py-1 border-2 rounded-lg bg-orange-400 hover:bg-orange-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-primary text-lg font-bold px-6 py-1 border-2 border-black rounded-lg bg-button-bg hover:bg-orange-400 cursor-pointer"
               onClick={runCode}
             >
               Run
@@ -181,7 +299,7 @@ export default function MonacoEditor() {
       {/* Output */}
       <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background text-terminal-foreground flex flex-col">
         <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary">
-          <h5 className="font-semibold text-gray-300">Output</h5>
+          <h5 className="font-bold text-gray-800 dark:text-gray-300">Output</h5>
           <span className="text-xs text-gray-500">Terminal</span>
         </div>
         <div className="flex-1 p-4 overflow-y-auto">
