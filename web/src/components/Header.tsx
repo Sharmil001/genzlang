@@ -11,7 +11,7 @@ export default function Header() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Image src="/logo.png" alt="GenZ Lang Logo" width={48} height={48} />
-          <h2 className="font-extrabold text-2xl font-logo">GenZang</h2>
+          <h2 className="font-extrabold text-2xl font-orbitron">GenZang</h2>
         </div>
 
         <div className="flex items-center gap-6">

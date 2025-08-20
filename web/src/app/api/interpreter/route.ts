@@ -5,6 +5,7 @@ import { ToAstVisitor } from "@c/engine/visitor";
 import { generateJS } from "@c/engine/js-generator";
 import { Script, createContext } from "node:vm";
 import { NextResponse, type NextRequest } from "next/server";
+import { errorMessages, genZErrorMessage } from "@w/src/utils/genzErrors";
 
 export type ResponseData = {
   output?: string;
@@ -16,14 +17,16 @@ export async function POST(req: NextRequest) {
     const { code } = await req.json() as { code: string };
 
     if (!code) {
-      return NextResponse.json({ error: "Code is required" }, { status: 400 });
+      return NextResponse.json({ output: errorMessages.noCode });
     }
+    
 
     // ==== Lexing ====
     const lexResult = GenZLexer.tokenize(code);
     if (lexResult.errors.length > 0) {
+      const lexPrefix = genZErrorMessage("lex", lexResult.errors[0]);
       return NextResponse.json({
-        output: `🧨 Syntax Error: ${lexResult.errors[0]?.message}`,
+        output: `[${lexPrefix}] ${lexResult.errors[0]?.message}`,
       });
     }
 
@@ -33,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (parserInstance.errors.length > 0) {
       const error = parserInstance.errors[0];
       return NextResponse.json({
-        output: `🧨 Syntax Error at line ${error?.token.startLine}, col ${error?.token.startColumn}: ${error?.message}`,
+        output: genZErrorMessage("parse", error),
       });
     }
 
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest) {
     new Script(compiledJS).runInContext(context);
 
     return NextResponse.json({ output: output.join("\n") || "No output" });
-  } catch (err: any) {
-    return NextResponse.json({ output: `Error: ${err.message}` }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ output: genZErrorMessage("runtime", error)}, { status: 500 });
   }
 }

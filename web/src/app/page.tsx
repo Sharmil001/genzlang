@@ -7,7 +7,7 @@ export default function Home() {
     <section className="container mx-auto p-6 text-center">
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="font-orbitron font-bold text-4xl xl:text-5xl">Not Just <span className="text-tertiary">Code</span>,</h1>
+          <h1 className="font-bold text-4xl xl:text-5xl">Not Just <span className="text-tertiary">Code</span>,</h1>
           <div className="flex justify-center items-center text-center gap-1">
             <h1 className="font-bold text-4xl xl:text-5xl">It's a Whole <span className="text-tertiary">Damn Vibe</span></h1>
           </div>
