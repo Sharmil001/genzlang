@@ -1,12 +1,25 @@
 "use client";
-import * as monaco from "monaco-editor";
+
 import { useEffect, useRef, useState } from "react";
+import * as monaco from "monaco-editor";
+import type { ResponseData } from "../app/api/interpreter/route";
 
 export default function MonacoEditor() {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [output, setOutput] = useState(`You straight vibin' 🔥`);
+  const [output, setOutput] = useState("You straight vibin\' 🔥");
+  const initialCode = [
+    'mood = "😎"',
+    "",
+    'fr mood same vibe "😎" {',
+    ' yo "You straight vibin\' 🔥"',
+    "}",
+    "nah {",
+    ' yo "Keep your head up, fam 💪😅"',
+    "}",
+  ].join("\n");
 
+  // Initialize Monaco Editor
   useEffect(() => {
     const loadMonaco = async () => {
       if ((window as any).monaco) {
@@ -35,9 +48,9 @@ export default function MonacoEditor() {
     const createEditor = () => {
       if (!editorRef.current) return;
 
-      const monaco = (window as any).monaco;
+      const monacoInstance = (window as any).monaco;
 
-      monaco.languages.register({ id: "genz" });
+      monacoInstance.languages.register({ id: "genz" });
 
       const genzKeywords = [
         "yo",
@@ -63,7 +76,7 @@ export default function MonacoEditor() {
         "not vibing",
       ];
 
-      monaco.languages.setMonarchTokensProvider("genz", {
+      monacoInstance.languages.setMonarchTokensProvider("genz", {
         tokenizer: {
           root: [
             [new RegExp(`\\b(${genzKeywords.join("|")})\\b`, "i"), "keyword"],
@@ -76,7 +89,7 @@ export default function MonacoEditor() {
         },
       });
 
-      monaco.editor.defineTheme("genzBlock", {
+      monacoInstance.editor.defineTheme("genzBlock", {
         base: "vs-dark",
         inherit: true,
         rules: [
@@ -98,20 +111,10 @@ export default function MonacoEditor() {
         },
       });
 
-      // apply the theme
-      monaco.editor.setTheme("genzBlock");
+      monacoInstance.editor.setTheme("genzBlock");
 
-      const editor = monaco.editor.create(editorRef.current, {
-        value: [
-          'mood = "😎"',
-          "",
-          'fr mood same vibe "😎"{',
-          '  yo "You straight vibin\' 🔥"',
-          "}",
-          "nah {",
-          '  yo "Keep your head up, fam 💪😅"',
-          "}",
-        ].join("\n"),
+      const editor = monacoInstance.editor.create(editorRef.current, {
+        value: initialCode,
         language: "genz",
         theme: "genzBlock",
         fontFamily: "JetBrains Mono, Fira Code, monospace",
@@ -135,46 +138,51 @@ export default function MonacoEditor() {
     loadMonaco();
   }, []);
 
-  const run = async () => {
+  const runCode = async () => {
     if (!monacoRef.current) return;
-    const editorValue = monacoRef.current.getValue();
+    const code = monacoRef.current.getValue();
 
-    const res = await fetch("http://localhost:3000/api/interpreter", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ code: editorValue }),
-    });
-
-    const data = await res.json();
-    if (data.error) console.error(data.error);
-    else setOutput(data.output);
+    try {
+      const res = await fetch("/api/interpreter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json() as ResponseData;
+      setOutput(data?.output || "No output");
+    } catch (err) {
+      console.error(err);
+      setOutput("Error running code");
+    }
   };
 
   return (
-    <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto p-4 min-h-80 h-full">
+    <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto min-h-[400px] h-full text-start">
+      {/* Editor */}
       <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background">
-        <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary ">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary">
           <h5 className="font-semibold text-gray-300">Playground</h5>
           <span className="text-xs text-gray-500">GenZ Editor</span>
         </div>
         <div className="flex flex-col gap-4 p-2">
-          <div ref={editorRef} className="w-full min-h-80 h-full" />
-          <div className="flex items-end justify-end">
+          <div ref={editorRef} className="w-full min-h-[300px] h-full" />
+          <div className="flex justify-end">
             <button
+              type="submit"
               className="text-primary text-lg font-bold px-6 py-1 border-2 rounded-lg bg-orange-400 hover:bg-orange-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={run}
+              onClick={runCode}
             >
               Run
             </button>
           </div>
         </div>
       </div>
+
+      {/* Output */}
       <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background text-terminal-foreground flex flex-col">
         <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary">
-          <h5 className="font-semibold text-gray-300">Ouptput</h5>
-          <span className="text-xs text-gray-500">Teminal</span>
+          <h5 className="font-semibold text-gray-300">Output</h5>
+          <span className="text-xs text-gray-500">Terminal</span>
         </div>
         <div className="flex-1 p-4 overflow-y-auto">
           <pre className="whitespace-pre-wrap">{output}</pre>

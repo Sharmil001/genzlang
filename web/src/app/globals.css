@@ -178,6 +178,10 @@
   }
 }
 
+.font-logo {
+  font-family: var(--font-orbitron);
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -200,4 +204,3 @@
   scrollbar-width: thin;
   scrollbar-color: #444 #1d1d1d;
 }
-
