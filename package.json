@@ -10,7 +10,7 @@
   "scripts": {
     "dev:web": "bun run --cwd web dev",
     "dev:core": "bun run --cwd core dev",
-    "build:web": "bun run --cwd web build",
+    "build:web": "bun run --cwd core build && bun run --cwd web build",
     "build:core": "bun run --cwd core build",
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
