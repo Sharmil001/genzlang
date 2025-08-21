@@ -21,6 +21,8 @@ export function interpreter(input: string) {
     parserInstance.input = lexResult.tokens;
     const cst = parserInstance.program();
 
+    // console.dir(cst, { depth: null });
+
     if (parserInstance.errors.length > 0) {
       const err = parserInstance.errors[0];
       console.error(

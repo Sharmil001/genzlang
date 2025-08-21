@@ -37,6 +37,8 @@
 
   --color-button-bg: oklch(0.75 0.166 66.6);
 
+  --color-box-border: var(--box-border);
+
   /* terminal */
   --color-terminal-background: var(--terminal-background);
   --color-terminal-foreground: var(--terminal-foreground);
@@ -100,6 +102,7 @@
 
   --terminal-background: oklch(1 0 0);
   --terminal-foreground: oklch(0.61 0.08 62.81);
+  --box-border: oklch(0.93 0.002 95);
 
   /* Monaco Editor - Light Mode */
   --monaco-bg: #fafafa;
@@ -154,6 +157,7 @@
   --ring: oklch(0.556 0 0);
   --terminal-background: oklch(0.23 0 0);
   --terminal-foreground: oklch(0.824 0.099 136.65);
+  --box-border: oklch(0.397 0.035 47.2 / 0.42);
 
   /* Monaco Editor - Dark Mode */
   --monaco-bg: #1d1d1d;

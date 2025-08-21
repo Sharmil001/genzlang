@@ -90,7 +90,7 @@ const Box = ({
   const angle = useMotionValue(0);
   const scale = useMotionValue(0);
   const borderRadius = useMotionValue(0);
-  const borderColor = useMotionValue("#4c41386b");
+  const borderColor = useMotionValue("var(--box-border)");
 
   React.useEffect(() => {
     function updateProps() {
@@ -111,10 +111,10 @@ const Box = ({
       );
       
       // More dynamic color based on proximity
-      const colorIntensity = transform(proximity, [0, 300], [0.8, 0.2]);
-      borderColor.set(`rgba(76, 65, 56, ${colorIntensity})`);
+      // const colorIntensity = transform(proximity, [0, 300], [0.8, 0.2]);
+      // borderColor.set(`rgba(76, 65, 56, ${colorIntensity})`);
       
-      scale.set(Math.max(newScale, 0.2)); // Minimum scale
+      scale.set(Math.max(newScale, 0.2)); 
       borderRadius.set(newBorderRadius);
     }
     
@@ -158,18 +158,18 @@ const styles: Record<string, React.CSSProperties> = {
     left: 0,
     width: "100vw",
     height: "100vh",
-    zIndex: -1, // Behind other content
+    zIndex: -1, 
     overflow: "hidden",
-    pointerEvents: "none", // Allows clicking through to content below
+    pointerEvents: "none", 
   },
   container: {
     position: "relative",
-    pointerEvents: "none", // Completely disable pointer events for the container
+    pointerEvents: "none",
   },
   Box: {
     height: boxSize,
     width: boxSize,
-    pointerEvents: "none", // Ensure boxes don't interfere with mouse events
+    pointerEvents: "none",
   },
   magnet: {
     height: boxSize,

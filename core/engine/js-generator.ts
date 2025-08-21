@@ -65,7 +65,13 @@ function generateExpression(expr: ASTNode): string | undefined | null {
         .map((e: ASTNode) => generateExpression(e))
         .join(", ")}]`;
     case "ArrayAccess":
-      return `${expr.name}[${generateExpression(expr.index)}]`;
+      return `(function() {
+        const _arr = ${expr.name};
+        const idx = ${generateExpression(expr.index)};
+        if (!Array.isArray(_arr)) throw new Error('${expr.name} is not an array');
+        if (idx < 0 || idx >= _arr.length) throw new Error(\`[|||] Array index out of bounds: tried \${idx}, length \${_arr.length}\`);  
+          return _arr[idx];
+        })()`;
     case "FunctionCall":
       return `${expr.name}(${expr.args.map(generateExpression).join(", ")})`;
     default:

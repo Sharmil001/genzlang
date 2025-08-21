@@ -117,7 +117,8 @@ export type StatementNode =
   | SayExpression
   | VariableDeclaration
   | ConditionalStatement
-  | BlockStatement;
+  | BlockStatement
+  | FunctionCall;
 
 export type ExpressionNode =
   | BinaryExpression
@@ -128,5 +129,6 @@ export type ExpressionNode =
   | ArrayLiteralNode
   | ArrayAccessNode
   | NullLiteral
-  | UndefinedLiteral;
+  | UndefinedLiteral
+  | FunctionCall;
   

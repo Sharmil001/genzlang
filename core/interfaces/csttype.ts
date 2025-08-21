@@ -11,6 +11,7 @@ export type ProgramCstChildren = {
   conditionalStatement?: ConditionalStatementCstNode[];
   loopStatement?: LoopStatementCstNode[];
   functionDeclaration?: FunctionDeclarationCstNode[];
+  functionCall?: FunctionCallCstNode[];
 };
 
 export interface SayStatementCstNode extends CstNode {
@@ -45,9 +46,9 @@ export interface ConditionalStatementCstNode extends CstNode {
 export type ConditionalStatementCstChildren = {
   Fr: IToken[];
   expression: ExpressionCstNode[];
-  LBrace: IToken[];
+  SBlock: IToken[];
   statementOrBlock: StatementOrBlockCstNode[];
-  RBrace: IToken[];
+  EBlock: IToken[];
   Nah?: IToken[];
 };
 
@@ -83,6 +84,7 @@ export type StatementCstChildren = {
   sayStatement?: SayStatementCstNode[];
   variableDeclaration?: VariableDeclarationCstNode[];
   conditionalStatement?: ConditionalStatementCstNode[];
+  functionCall?: FunctionCallCstNode[];
 };
 
 export interface BlockCstNode extends CstNode {
@@ -91,9 +93,9 @@ export interface BlockCstNode extends CstNode {
 }
 
 export type BlockCstChildren = {
-  LBrace: IToken[];
+  SBlock: IToken[];
   statement: StatementCstNode[];
-  RBrace: IToken[];
+  EBlock: IToken[];
 };
 
 export interface ExpressionCstNode extends CstNode {
@@ -186,6 +188,7 @@ export type AtomicExpressionCstChildren = {
   Idk?: IToken[];
   None?: IToken[];
   arrayAccess?: ArrayAccessCstNode[];
+  functionCall?: FunctionCallCstNode[];
 };
 
 export interface ArrayLiteralCstNode extends CstNode {
@@ -227,10 +230,15 @@ export type FunctionDeclarationCstChildren = {
   statementOrBlock: StatementOrBlockCstNode[];
 };
 
-export interface FunctionCallCstChildren {
+export interface FunctionCallCstNode extends CstNode {
+  name: "functionCall";
+  children: FunctionCallCstChildren;
+}
+
+export type FunctionCallCstChildren  = {
   Identifier?: IToken[];    
   LParen?: IToken[];       
-  ArgumentList?: CstNode[];
+  argumentList?: CstNode[];
   RParen?: IToken[];      
 }
 

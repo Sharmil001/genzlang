@@ -27,12 +27,12 @@ export default function MonacoEditor() {
       [
         'mood = "😎"',
         "",
-        'fr mood same vibe "😎" {',
+        'fr mood same vibe "😎" ->',
         ' yo "You straight vibin\' 🔥"',
-        "}",
-        "nah {",
+        "<-",
+        "nah ->",
         ' yo "Keep your head up, fam 💪😅"',
-        "}",
+        "<-",
       ].join("\n"),
     []
   );

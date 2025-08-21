@@ -49,6 +49,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       ...(ctx.conditionalStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.loopStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.functionDeclaration?.map((stmt) => this.visit(stmt)) || []),
+      ...(ctx.functionCall?.map((stmt) => this.visit(stmt)) || []),
     ];
   }
 
@@ -114,10 +115,15 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   functionCall(ctx: FunctionCallCstChildren): FunctionCall {
     if (!ctx.Identifier?.[0]) throw new Error("Invalid function call");
 
+    let args: ExpressionNode[] = [];
+    if (ctx.argumentList && ctx.argumentList[0]) {
+      args = this.visit(ctx.argumentList[0]);
+    }
+
     return {
       type: "FunctionCall",
       name: ctx.Identifier[0].image,
-      args: (ctx.ArgumentList && this.visit(ctx.ArgumentList?.[0] || [])) || [],
+      args,
     };
   }
 
@@ -138,6 +144,7 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
     if (ctx.sayStatement) return this.visit(ctx.sayStatement);
     if (ctx.variableDeclaration) return this.visit(ctx.variableDeclaration);
     if (ctx.conditionalStatement) return this.visit(ctx.conditionalStatement);
+    if (ctx.functionCall) return this.visit(ctx.functionCall);
     throw new Error("Unknown statement");
   }
 
@@ -254,16 +261,20 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       return { type: "NullLiteral", value: null };
     }
 
+    if (ctx.functionCall?.[0]) {
+      return this.visit(ctx.functionCall[0]);
+    }
+
+    if (ctx.arrayAccess?.[0]) {
+      return this.visit(ctx.arrayAccess[0]);
+    }
+
     if (ctx.Identifier?.[0]) {
       return { type: "Identifier", name: ctx.Identifier[0].image };
     }
 
     if (ctx.arrayLiteral?.[0]) {
       return this.visit(ctx.arrayLiteral[0]);
-    }
-
-    if (ctx.arrayAccess?.[0]) {
-      return this.visit(ctx.arrayAccess[0]);
     }
 
     if (ctx.expression?.[0]) {
