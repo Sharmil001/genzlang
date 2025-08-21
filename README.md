@@ -29,18 +29,28 @@ Because:
 1. Clone the repository
 ```bash
     git clone https://github.com/genz-lang/genz-lang.git
+    cd genz-lang
 ```
 2. Install dependencies
 ```bash
     bun install
+    # or, if you want to install separately
+    # bun install --cwd web
+    # bun install --cwd core
 ```
-3. Run the interpreter
+3. Run the core(Interpreter)
 ```bash
     bun run index.ts
+    # or, bun run dev:core
 ```
-4. Usage
+4. Run the web(Next.js)
 ```bash
-  yo "Wassup, world!"
+    bun run dev:web
+```
+5. Usage
+```bash
+    bun run dev:core
+    yo "Wassup, world!"
 ```
 
 ## 🤝 Contribute
