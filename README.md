@@ -89,9 +89,9 @@ fibbonaci(10)
 #Create .gz file under examples folder
 fibbo.gz 
 
-bun run GENZ examples/fibo.gz #execute at root
+bun run GENZ examples/fibbo.gz #execute at root
 #or
-npm run GENZ examples/fibo.gz
+npm run GENZ examples/fibbo.gz
 ```
 
 ## 🤝 Contribute
