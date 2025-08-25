@@ -44,12 +44,12 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
 
   program(ctx: ProgramCstChildren): ASTNode[] {
     return [
-      ...(ctx.sayStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.variableDeclaration?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.conditionalStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.loopStatement?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.functionDeclaration?.map((stmt) => this.visit(stmt)) || []),
       ...(ctx.functionCall?.map((stmt) => this.visit(stmt)) || []),
+      ...(ctx.sayStatement?.map((stmt) => this.visit(stmt)) || []),
     ];
   }
 
@@ -76,39 +76,49 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   ): ConditionalStatement {
     if (!ctx.statementOrBlock?.[0])
       throw new Error("Invalid conditional statement");
+    
+    const consequent = this.visit(ctx.statementOrBlock[0]);
+    const alternate = ctx.Nah && ctx.statementOrBlock?.[1] 
+      ? this.visit(ctx.statementOrBlock[1]) 
+      : null;
+    
     return {
       type: "ConditionalStatement",
       test: this.visit(ctx.expression),
-      consequent: this.visit(ctx.statementOrBlock[0]),
-      alternate:
-        ctx.Nah && ctx.statementOrBlock?.[1]
-          ? this.visit(ctx.statementOrBlock[1])
-          : null,
+      consequent: Array.isArray(consequent) ? consequent : [consequent],
+      alternate: alternate ? (Array.isArray(alternate) ? alternate : [alternate]) : null,
     };
   }
 
+  // FIX 2: Return array for body
   loopStatement(ctx: LoopStatementCstChildren): LoopStatement {
     if (!ctx.expression?.[0]) throw new Error("Invalid loop statement");
     if (!ctx.expression?.[1]) throw new Error("Invalid loop statement");
+    
+    const body = this.visit(ctx.statementOrBlock);
+    
     return {
       type: "LoopStatement",
       start: this.visit(ctx.expression[0]),
       end: this.visit(ctx.expression[1]),
       loopType: ctx.To ? "index" : "collection",
-      body: this.visit(ctx.statementOrBlock),
+      body: Array.isArray(body) ? body : [body],
     };
   }
 
+  // FIX 3: Return array for body
   functionDeclaration(
     ctx: FunctionDeclarationCstChildren
   ): FunctionDeclaration {
     if (!ctx.Identifier?.[0]) throw new Error("Invalid function declaration");
 
+    const body = this.visit(ctx.statementOrBlock);
+
     return {
       type: "FunctionDeclaration",
       name: ctx.Identifier[0].image,
       params: ctx.parameterList ? this.visit(ctx.parameterList?.[0] || []) : [],
-      body: this.visit(ctx.statementOrBlock),
+      body: Array.isArray(body) ? body : [body],
     };
   }
 
@@ -141,17 +151,19 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   }
 
   statement(ctx: StatementCstChildren): StatementNode {
-    if (ctx.sayStatement) return this.visit(ctx.sayStatement);
     if (ctx.variableDeclaration) return this.visit(ctx.variableDeclaration);
     if (ctx.conditionalStatement) return this.visit(ctx.conditionalStatement);
     if (ctx.functionCall) return this.visit(ctx.functionCall);
+    if (ctx.loopStatement) return this.visit(ctx.loopStatement);            
+    if (ctx.functionDeclaration) return this.visit(ctx.functionDeclaration);
+    if (ctx.sayStatement) return this.visit(ctx.sayStatement);
     throw new Error("Unknown statement");
   }
 
   block(ctx: BlockCstChildren): BlockStatement {
     return {
       type: "BlockStatement",
-      body: ctx.statement.map((stmt) => this.visit(stmt)),
+      body: ctx.statement ? ctx.statement.map((stmt) => this.visit(stmt)) : [],
     };
   }
 
@@ -253,6 +265,14 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
       return { type: "StringLiteral", value: ctx.StringLiteral[0].image };
     }
 
+    if (ctx.Legit?.[0]) {
+      return { type: "BooleanLiteral", value: true };
+    }
+
+    if (ctx.Cap?.[0]) {
+      return { type: "BooleanLiteral", value: false };
+    }
+
     if (ctx.Idk?.[0]) {
       return { type: "UndefinedLiteral", value: undefined };
     }
@@ -305,8 +325,9 @@ export class ToAstVisitor extends parserInstance.getBaseCstVisitorConstructor() 
   makeBinary(
     left: ExpressionNode,
     operator: string,
-    right: ExpressionNode
+    right: ExpressionNode | null
   ): BinaryExpression {
+    if (right === null) throw new Error("Binary expression missing right operand");
     return { type: "BinaryExpression", operator, left, right };
   }
 }

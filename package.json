@@ -14,7 +14,8 @@
     "build:core": "bun run --cwd core build",
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
-    "typecheck:be": "tsc --noEmit -p core"
+    "typecheck:be": "tsc --noEmit -p core",
+    "genz": "tsx core/genz-runner.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

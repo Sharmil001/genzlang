@@ -4,12 +4,21 @@ export function generateJS(ast: ASTNode[]): string {
   return ast.map((node) => generateNode(node)).join("\n");
 }
 
+// Track declared variables
+const declaredVariables = new Set<string>();
+
 function generateNode(node: ASTNode): string {
   switch (node.type) {
     case "SayExpression":
       return `console.log(${generateExpression(node.value)});`;
     case "VariableDeclaration":
-      return `let ${node.name} = ${generateExpression(node.init)};`;
+      if(declaredVariables.has(node.name)) {
+        return `${node.name} = ${generateExpression(node.init)};`;
+      }
+      else {
+        declaredVariables.add(node.name);
+        return `let ${node.name} = ${generateExpression(node.init)};`;
+      }
     case "ConditionalStatement":
       return `if (${generateExpression(node.test)}) {
     ${node.consequent.map(generateNode).join("\n")}
@@ -21,12 +30,13 @@ function generateNode(node: ASTNode): string {
           : ""
         }`;
     case "LoopStatement":
+      console.dir(node, { depth: null });
       return node.loopType === "index"
         ? `for (let i = ${generateExpression(
           node.start
-        )}; i < ${generateExpression(node.end)}; i++) {${node.body.map(
-          generateNode
-        )}}`
+        )}; i < ${generateExpression(node.end)}; i++) {
+          ${node.body.map(generateNode).join("\n")}
+        }`
         : `for (const ${generateExpression(node.start)} of ${generateExpression(
           node.end
         )}) {${node.body.map(generateNode)}}`;
@@ -43,11 +53,13 @@ function generateNode(node: ASTNode): string {
   }
 }
 
-function generateExpression(expr: ASTNode): string | undefined | null {
+function generateExpression(expr: ASTNode): string | boolean | undefined | null {
   switch (expr.type) {
     case "StringLiteral":
       return expr.value;
     case "NumberLiteral":
+      return expr.value;
+    case "BooleanLiteral":
       return expr.value;
     case "UndefinedLiteral":
       return undefined;

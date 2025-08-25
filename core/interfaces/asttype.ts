@@ -8,6 +8,7 @@ export type ASTNode =
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
+  | BooleanLiteral
   | NullLiteral
   | UndefinedLiteral
   | ArrayLiteralNode
@@ -16,6 +17,7 @@ export type ASTNode =
   | LoopStatement
   | FunctionDeclaration
   | FunctionCall;
+
 export interface ProgramNode { type: "Program";
   body: ASTNode[];
 }
@@ -100,6 +102,11 @@ export interface UndefinedLiteral {
   value: undefined;
 }
 
+export interface BooleanLiteral {
+  type: "BooleanLiteral";
+  value: boolean;
+}
+
 export interface FunctionDeclaration {
   type: "FunctionDeclaration";
   name: string;
@@ -118,7 +125,9 @@ export type StatementNode =
   | VariableDeclaration
   | ConditionalStatement
   | BlockStatement
-  | FunctionCall;
+  | FunctionCall
+  | LoopStatement
+  | FunctionDeclaration;
 
 export type ExpressionNode =
   | BinaryExpression
@@ -126,6 +135,7 @@ export type ExpressionNode =
   | IdentifierNode
   | NumberLiteralNode
   | StringLiteralNode
+  | BooleanLiteral
   | ArrayLiteralNode
   | ArrayAccessNode
   | NullLiteral

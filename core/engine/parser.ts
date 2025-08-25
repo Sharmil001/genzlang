@@ -37,6 +37,8 @@ import {
   Vibe,
   SBlock,
   EBlock,
+  Legit,
+  Cap,
 } from "./lexer";
 
 class GenZParser extends CstParser {
@@ -142,10 +144,12 @@ class GenZParser extends CstParser {
 
   private statement = this.RULE("statement", () => {
     this.OR([
-      { ALT: () => this.SUBRULE(this.sayStatement) },
       { ALT: () => this.SUBRULE(this.conditionalStatement) },
       { ALT: () => this.SUBRULE(this.functionCall) },
       { ALT: () => this.SUBRULE(this.variableDeclaration) },
+      { ALT: () => this.SUBRULE(this.loopStatement) },
+      { ALT: () => this.SUBRULE(this.functionDeclaration) },
+      { ALT: () => this.SUBRULE(this.sayStatement) },
     ]);
   });
 
@@ -222,6 +226,8 @@ class GenZParser extends CstParser {
       { ALT: () => this.SUBRULE(this.functionCall) },
       { ALT: () => this.SUBRULE(this.arrayAccess) },
       { ALT: () => this.CONSUME(Identifier) },
+      { ALT: () => this.CONSUME(Legit) },
+      { ALT: () => this.CONSUME(Cap) },
       {
         ALT: () => {
           this.CONSUME(LParen);

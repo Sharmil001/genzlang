@@ -93,6 +93,12 @@ export const WhiteSpace = createToken({
   group: Lexer.SKIPPED,
 });
 
+export const Newline = createToken({
+  name: "Newline",
+  pattern: /\n+/,     
+  line_breaks: true   
+});
+
 //block
 export const SBlock = createToken({ name: "SBlock", pattern: /->/ });
 export const EBlock = createToken({ name: "EBlock", pattern: /<-/ });
@@ -100,6 +106,7 @@ export const EBlock = createToken({ name: "EBlock", pattern: /<-/ });
 export const allTokens = [
   // Whitespace first and skipped
   WhiteSpace,
+  Newline,
 
   // Symbols and delimiters
   SBlock,

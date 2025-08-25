@@ -85,6 +85,8 @@ export type StatementCstChildren = {
   variableDeclaration?: VariableDeclarationCstNode[];
   conditionalStatement?: ConditionalStatementCstNode[];
   functionCall?: FunctionCallCstNode[];
+  loopStatement?: LoopStatementCstNode[];
+  functionDeclaration?: FunctionDeclarationCstNode[];
 };
 
 export interface BlockCstNode extends CstNode {
@@ -180,6 +182,8 @@ export interface AtomicExpressionCstNode extends CstNode {
 export type AtomicExpressionCstChildren = {
   NumberLiteral?: IToken[];
   StringLiteral?: IToken[];
+  Legit?: IToken[];
+  Cap?: IToken[];
   Identifier?: IToken[];
   LParen?: IToken[];
   expression?: ExpressionCstNode[];
