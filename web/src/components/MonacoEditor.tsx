@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import * as monaco from "monaco-editor";
 import type { ResponseData } from "../app/api/interpreter/route";
 import { Play } from "lucide-react";
-import AnimatedExecuteButton from "./ExecuteButton";
 
 interface MonacoRequire {
   (deps: string[], callback: () => void): void;
