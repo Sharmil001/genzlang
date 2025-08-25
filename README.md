@@ -35,6 +35,21 @@ loop 0 to 5 ->
   yo "Counting vibes..."  
 <-
 ```
+Fibbonaci `fibbo.gz`
+```bash
+vibe fibbonaci(n) -> 
+  a = 0
+  b = 1
+  loop 2 to n ->
+    yo a
+    temp = a + b
+    a = b
+    b = temp
+  <-
+<-
+
+fibbonaci(10)
+```
 
 ## 🚀 Quick Start
 
@@ -68,6 +83,15 @@ loop 0 to 5 ->
 ```bash
     bun run dev:core
     yo "Wassup, world!"
+```
+6. Create & execute .gz file
+```bash
+#Create .gz file under examples folder
+fibbo.gz 
+
+bun run GENZ examples/fibo.gz #execute at root
+#or
+npm run GENZ examples/fibo.gz
 ```
 
 ## 🤝 Contribute
