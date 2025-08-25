@@ -10,7 +10,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            @Sharmil001
+            @Genzang Team
           </a>
         </span>
         <a

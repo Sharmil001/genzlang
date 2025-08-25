@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as monaco from "monaco-editor";
 import type { ResponseData } from "../app/api/interpreter/route";
+import { Play } from "lucide-react";
+import AnimatedExecuteButton from "./ExecuteButton";
 
 interface MonacoRequire {
   (deps: string[], callback: () => void): void;
@@ -287,10 +289,11 @@ export default function MonacoEditor() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="text-primary text-lg font-bold px-6 py-1 border-2 border-black rounded-lg bg-button-bg hover:bg-orange-400 cursor-pointer"
+              className="flex items-center gap-1 text-primary text-lg font-bold px-2 py-1 border-2 border-black rounded-lg bg-button-bg hover:bg-orange-400 cursor-pointer"
               onClick={runCode}
             >
-              Run
+              <Play className="w-5 h-5" />
+              <span>Execute</span>
             </button>
           </div>
         </div>
