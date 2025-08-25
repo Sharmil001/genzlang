@@ -272,7 +272,7 @@ export default function MonacoEditor() {
   };
 
   return (
-    <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto min-h-[400px] h-full text-start">
+    <div className="flex flex-wrap gap-6 w-full rounded-xl container mx-auto h-full text-start">
       {/* Editor */}
       <div className="flex-1 border-4 border-border-secondary rounded-lg shadow bg-terminal-background flex flex-col">
         <div className="flex justify-between items-center px-4 py-2 border-b border-border-secondary">
@@ -281,7 +281,7 @@ export default function MonacoEditor() {
         </div>
         <div className="flex flex-col gap-4 p-2 flex-1">
           {/* wrapper fixes hydration warning */}
-          <div className="flex-1 min-h-[300px]">
+          <div className="flex-1 h-full">
             <div ref={editorRef} className="w-full h-full" />
           </div>
           <div className="flex justify-end">

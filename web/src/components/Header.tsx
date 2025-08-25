@@ -7,7 +7,7 @@ export default function Header() {
  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <div className="p-4 container mx-auto">
+    <div className="px-4 pt-4 container mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Image src="/logo.png" alt="GenZ Lang Logo" width={48} height={48} />
