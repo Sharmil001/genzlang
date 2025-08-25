@@ -30,8 +30,6 @@ export function interpreter(input: string): void {
       return;
     }
 
-    console.log(cst);
-
     // === 3. AST Generation ===
     const visitor = new ToAstVisitor();
     const ast = visitor.visit(cst);
@@ -41,12 +39,8 @@ export function interpreter(input: string): void {
       return;
     }
 
-    console.dir(ast, { depth: null });
-
     // === 4. JS Generation ===
     const compiledjs = generateJS(ast);
-
-    console.log(compiledjs);
 
     // === 5. Output & Execution ===
     const distDir = path.resolve("dist");

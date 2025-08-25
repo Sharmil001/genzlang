@@ -15,7 +15,7 @@
     "lint": "biome lint",
     "typecheck:web": "tsc --noEmit -p web",
     "typecheck:be": "tsc --noEmit -p core",
-    "genz": "tsx core/genz-runner.ts"
+    "GENZ": "tsx core/genz-runner.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

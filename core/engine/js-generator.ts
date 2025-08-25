@@ -30,7 +30,6 @@ function generateNode(node: ASTNode): string {
           : ""
         }`;
     case "LoopStatement":
-      console.dir(node, { depth: null });
       return node.loopType === "index"
         ? `for (let i = ${generateExpression(
           node.start
