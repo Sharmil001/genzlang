@@ -19,6 +19,23 @@ Because:
 - Educators who want to teach core concepts in a fun way
 - Rebels who think `vibe = "chill"` > `let x = "chill"`
 
+## 💻 Examples:
+If / Else but make it ✨chaotic
+```bash
+mood = "bored"
+
+fr mood == "bored" ->
+    yo "let’s vibe 🎶"
+nah:
+    yo "keep grinding 💻"
+```
+Looping (aka infinite grindset ♾️)
+```bash
+loop 0 to 5 ->
+  yo "Counting vibes..."  
+<-
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
