@@ -60,8 +60,8 @@ fibbonaci(10)
 ### Installation
 1. Clone the repository
 ```bash
-    git clone https://github.com/genz-lang/genz-lang.git
-    cd genz-lang
+    git clone https://github.com/genz-lang/genzlang.git
+    cd genzlang
 ```
 2. Install dependencies
 ```bash
@@ -116,7 +116,7 @@ Pull up with a PR or open an issue. let’s build the weirdest language ever, to
 ---
 <p align="center">
   Made with ❤️ by the <b>GenZ Lang</b> team. <br />
-  <a href="https://github.com/Sharmil001/genz-lang/issues">Report Bugs</a> · 
-  <a href="https://github.com/Sharmil001/genz-lang/labels/enhancement">Request Features</a>
+  <a href="https://github.com/Sharmil001/genzlang/issues">Report Bugs</a> · 
+  <a href="https://github.com/Sharmil001/genzlang/labels/enhancement">Request Features</a>
 </p>
 
