@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-4 container mx-auto backdrop-blur-md">
+    <div className="fixed bottom-0 left-0 right-0 p-4 container mx-auto">
       <div className="flex items-center justify-between">
         <span>
           Developed by{" "}
