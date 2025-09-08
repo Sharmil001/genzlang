@@ -1,6 +1,6 @@
 # GenZ Language (genz-lang)
 > ⚡ A bold, expressive, Gen Z-inspired programming language for the terminal generation.  
-> It’s not just code — it’s a whole damn *vibe*.
+> It’s not just code. it’s a whole damn *vibe*.
 
 `genz-lang` reimagines traditional programming through a Gen Z lens — with slangy keywords, emoji-rich syntax, and natural language expressions.  
 Built for fun, education, and creative chaos, this language is for developers who are tired of boring old semicolons and crave a bit of ✨drip✨ in their code.
